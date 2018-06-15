@@ -13,7 +13,8 @@ class CocoDataGenerator(utils.Sequence):
     def __init__(self, batch_size=16, images_in_memory=200,
                  batches_with_images=50, directory_path=None,
                  dictionary_size=2048, sequence_length=20,
-                 image_shape=(128, 128), batches_per_epoch=10):
+                 image_shape=(128, 128), batches_per_epoch=10,
+                 image_limit=None):
         self.batch_size = batch_size
         self.images_in_memory = images_in_memory
         self.batches_with_images = batches_with_images
@@ -21,6 +22,7 @@ class CocoDataGenerator(utils.Sequence):
         self.sequence_length = sequence_length
         self.batches_per_epoch = batches_per_epoch
         self.current_batch_counter = 0
+        self.image_limit = image_limit
 
         if directory_path is None:
             self.directory_path = DEFAULT_DIR_PATH
@@ -42,22 +44,30 @@ class CocoDataGenerator(utils.Sequence):
 
         self.image_mappings = {}
 
+        image_counter = 0
+
         for image_data in json_annotations['images']:
             image_id = int(image_data['id'])
             self.image_mappings[image_id] = (image_data['file_name'], [])
+            if self.image_limit is not None:
+                if image_counter > self.image_limit:
+                    break
+            image_counter += 1
 
         self.caption_mapping = {}
 
         for annotation in json_annotations['annotations']:
             image_id = int(annotation['image_id'])
             annotation_id = int(annotation['id'])
+            if image_id not in self.image_mappings:
+                continue
             self.image_mappings[image_id][1].append(annotation_id)
             caption = annotation['caption']
             self.caption_mapping[annotation_id] = [caption, image_id]
 
     def fetch_new_images(self):
         relevant_directory = self.directory_path + 'train2014/'
-        images_to_load = np.random.choice(self.image_mappings.keys(),
+        images_to_load = np.random.choice(np.array(self.image_mappings.keys()),
                                           size=self.images_in_memory)
 
         relevant_images = {}

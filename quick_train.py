@@ -62,7 +62,7 @@ def load_train_data():
 
 
 def main():
-    data_gen = CocoDataGenerator()
+    data_gen = CocoDataGenerator(image_limit=1000)
     data_gen.load_annotation_data()
     data_gen.prepare_captions_for_training()
 
