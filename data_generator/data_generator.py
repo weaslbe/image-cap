@@ -14,7 +14,7 @@ class CocoDataGenerator(utils.Sequence):
                  batches_with_images=50, directory_path=None,
                  dictionary_size=2048, sequence_length=20,
                  image_shape=(128, 128), batches_per_epoch=10,
-                 image_limit=None):
+                 image_limit=None, lazy_build_output=True):
         self.batch_size = batch_size
         self.images_in_memory = images_in_memory
         self.batches_with_images = batches_with_images
@@ -24,6 +24,7 @@ class CocoDataGenerator(utils.Sequence):
         self.current_batch_counter = 0
         self.image_limit = image_limit
         self.image_shape = image_shape
+        self.lazy_build_output = lazy_build_output
 
         if directory_path is None:
             self.directory_path = DEFAULT_DIR_PATH
@@ -111,13 +112,21 @@ class CocoDataGenerator(utils.Sequence):
                 caption_tokenized.append(self.end_token_index)
             caption_output = caption_tokenized[1:]
             caption_output.append(self.end_token_index)
-            caption_one_hot = []
-            for word_token in caption_output:
-                num_tokens = self.start_token_index
-                one_hot = [0 for i in range(num_tokens)]
-                one_hot[word_token] = 1
-                caption_one_hot.append(one_hot)
-            self.caption_mapping[key][0] = (np.array(caption_tokenized), np.array(caption_one_hot))
+            if not self.lazy_build_output:
+                output = self.build_one_hot_output(caption_output)
+            else:
+                output = caption_output
+            self.caption_mapping[key][0] = (np.array(caption_tokenized),
+                                            output)
+
+    def build_one_hot_output(self, sequence):
+        one_hot_output = []
+        for word_token in sequence:
+            num_tokens = self.start_token_index
+            one_hot_rep = [0 for i in range(num_tokens)]
+            one_hot_rep[word_token] = 1
+            one_hot_output.append(one_hot_rep)
+        return np.array(one_hot_output)
 
     def generate_batch(self):
         if self.current_batch_counter == 0:
@@ -131,7 +140,11 @@ class CocoDataGenerator(utils.Sequence):
             image_id = self.caption_mapping[caption_id][1]
             batch_image.append(self.relevant_images[image_id])
             batch_caption.append(self.caption_mapping[caption_id][0][0])
-            batch_output.append(self.caption_mapping[caption_id][0][1])
+            if not self.lazy_build_output:
+                batch_output.append(self.caption_mapping[caption_id][0][1])
+            else:
+                output = self.build_one_hot_output(self.caption_mapping[caption_id][0][1])
+                batch_output.append(output)
         self.current_batch_counter = (self.current_batch_counter + 1) % self.batches_with_images
 
         return [np.array(batch_image), np.array(batch_caption)], np.array(batch_output)
