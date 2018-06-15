@@ -1,5 +1,7 @@
 from keras import utils
-from keras.preprocessing.text import text_to_word_sequence
+from keras.preprocessing.text import Tokenizer
+
+import numpy as np
 import json
 
 DEFAULT_DIR_PATH = '/data/dl_lecture_data/TrainVal/'
@@ -9,7 +11,7 @@ class CocoDataGenerator(utils.Sequence):
 
     def __init__(self, batch_size=16, images_in_memory=100,
                  batches_with_images=10, directory_path=None,
-                 dictionary_size=1024, sequence_length=20,
+                 dictionary_size=None, sequence_length=20,
                  image_shape=(128, 128)):
         self.batch_size = batch_size
         self.images_in_memory = images_in_memory
@@ -47,26 +49,39 @@ class CocoDataGenerator(utils.Sequence):
             image_id = int(annotation['image_id'])
             annotation_id = int(annotation['id'])
             self.image_mappings[image_id][1].append(annotation_id)
-            caption_sequence = text_to_word_sequence(annotation['caption'])
-            self.caption_mapping[annotation_id] = caption_sequence
-
-        print(len(self.image_mappings.keys()))
-        print(len(self.caption_mapping.keys()))
-
-        max_len = 0
-        min_len = 1000
-        sum_len = 0
-        for key, value in self.caption_mapping.items():
-            max_len = max(max_len, len(value))
-            min_len = min(min_len, len(value))
-            sum_len += len(value)
-
-        print(max_len)
-        print(min_len)
-        print(sum_len)
+            caption = annotation['caption']
+            self.caption_mapping[annotation_id] = caption
 
     def fetch_new_images(self):
         pass
+
+    def prepare_captions_for_training(self):
+        self.caption_tokenizer = Tokenizer(num_words=self.dictionary_size)
+
+        all_captions = [caption for key, caption in self.caption_mapping.items()]
+
+        self.caption_tokenizer.fit_on_texts(all_captions)
+
+        self.start_token_index = self.caption_tokenizer.num_tokens + 1
+        print(start_token_index)
+        self.end_token_index = 0
+
+        for key, caption in list(self.caption_mapping.items()):
+            caption_tokenized = self.caption_tokenizer.texts_to_sequences([caption])[0]
+            if len(caption_tokenized) > self.sequence_length - 1:
+                caption_tokenized = caption_tokenized[:self.sequence_length - 1]
+            caption_tokenized = [self.start_token_index] + caption_tokenized
+            while caption_tokenized < self.sequence_length:
+                caption_tokenized.append(self.end_token_index)
+            caption_output = caption_tokenized[1:]
+            caption_output.append(self.end_token_index)
+            caption_one_hot = []
+            for word_token in caption_output:
+                num_tokens = self.caption_tokenizer.num_tokens + 1
+                one_hot = [0 for i in range(num_tokens)]
+                one_hot[word_token] = 1
+                caption_one_hot.append(one_hot)
+            self.caption_mapping[key] = (np.array(caption_tokenized), np.array(caption_output))
 
     def generate_batch(self):
         pass
