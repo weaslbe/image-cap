@@ -53,7 +53,7 @@ class CocoDataGenerator(utils.Sequence):
             annotation_id = int(annotation['id'])
             self.image_mappings[image_id][1].append(annotation_id)
             caption = annotation['caption']
-            self.caption_mapping[annotation_id] = (caption, image_id)
+            self.caption_mapping[annotation_id] = [caption, image_id]
 
     def fetch_new_images(self):
         relevant_directory = self.directory_path + 'train2014/'
