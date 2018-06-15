@@ -1,5 +1,6 @@
 from quick_model import QuickImageCaptioningModel
 from skimage import io, transform
+from data_generator.data_generator import CocoDataGenerator
 from keras.preprocessing.text import Tokenizer
 import json
 import numpy as np
@@ -61,13 +62,17 @@ def load_train_data():
 
 
 def main():
-    short_train_data = load_train_data()
+    data_gen = CocoDataGenerator()
+    gen.load_annotation_data()
+    gen.prepare_captions_for_training()
 
-    model = QuickImageCaptioningModel().build_model(1024)
+    model = QuickImageCaptioningModel().build_model(2048)
 
-    model.compile('adam', loss='categorical_crossentropy', sample_weight_mode='temporals')
+    model.compile('adam', loss='categorical_crossentropy',
+                  sample_weight_mode='temporals')
 
-    model.fit([short_train_data[0], short_train_data[1]], np.array(short_train_data[2]), batch_size=16)
+    model.fit_generator(generator=data_gen, epochs=10,
+                        use_multiprocessing=False)
 
 
 if __name__ == "__main__":
