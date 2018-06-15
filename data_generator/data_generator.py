@@ -70,7 +70,7 @@ class CocoDataGenerator(utils.Sequence):
             if len(caption_tokenized) > self.sequence_length - 1:
                 caption_tokenized = caption_tokenized[:self.sequence_length - 1]
             caption_tokenized = [self.start_token_index] + caption_tokenized
-            while caption_tokenized < self.sequence_length:
+            while len(caption_tokenized) < self.sequence_length:
                 caption_tokenized.append(self.end_token_index)
             caption_output = caption_tokenized[1:]
             caption_output.append(self.end_token_index)
