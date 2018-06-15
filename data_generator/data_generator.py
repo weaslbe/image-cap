@@ -67,7 +67,9 @@ class CocoDataGenerator(utils.Sequence):
 
     def fetch_new_images(self):
         relevant_directory = self.directory_path + 'train2014/'
-        images_to_load = np.random.choice(np.array(self.image_mappings.keys()),
+        avail_images = np.array(self.image_mappings.keys())
+        print(avail_images.shape)
+        images_to_load = np.random.choice(avail_images,
                                           size=self.images_in_memory)
 
         relevant_images = {}
