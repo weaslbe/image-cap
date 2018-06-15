@@ -18,7 +18,7 @@ class CocoDataGenerator(utils.Sequence):
         self.sequence_length = sequence_length
 
         if directory_path is None:
-            self.dictionary_path = DEFAULT_DIR_PATH
+            self.directory_path = DEFAULT_DIR_PATH
         else:
             self.directory_path = directory_path
 
