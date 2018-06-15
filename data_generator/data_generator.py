@@ -1,18 +1,26 @@
-from keras.utils import Sequence
+from keras import utils
+from keras.preprocessing.text import text_to_word_sequence
 import json
 
+DEFAULT_DIR_PATH = '/data/dl_lecture_data/TrainVal/'
 
-class CocoDataGenerator(Sequence):
 
-    def __init__(self, batch_size, images_in_memory,
-                 batches_with_images, directory_path,
-                 dictionary_size, sequence_length):
+class CocoDataGenerator(utils.Sequence):
+
+    def __init__(self, batch_size=16, images_in_memory=100,
+                 batches_with_images=10, directory_path=None,
+                 dictionary_size=1024, sequence_length=20,
+                 image_shape=(128, 128)):
         self.batch_size = batch_size
         self.images_in_memory = images_in_memory
         self.batches_with_images = batches_with_images
-        self.directory_path = directory_path
         self.dictionary_size = dictionary_size
         self.sequence_length = sequence_length
+
+        if directory_path is None:
+            self.dictionary_path = DEFAULT_DIR_PATH
+        else:
+            self.directory_path = directory_path
 
     def __len__(self):
         return self.batches_with_images
@@ -39,10 +47,26 @@ class CocoDataGenerator(Sequence):
             image_id = int(annotation['image_id'])
             annotation_id = int(annotation['id'])
             self.image_mappings[image_id][1].append(annotation_id)
-            self.caption_mapping[annotation_id] = annotation['caption']
+            caption_sequence = text_to_word_sequence(annotation['caption'])
+            self.caption_mapping[annotation_id] = caption_sequence
 
         print(len(self.image_mappings.keys()))
         print(len(self.caption_mapping.keys()))
+
+        max_len = 0
+        min_len = 1000
+        sum_len = 0
+        for key, value in self.caption_mapping.items():
+            max_len = max(max_len, len(value))
+            min_len = min(min_len, len(value))
+            sum_len += len(value)
+
+        print(max_len)
+        print(min_len)
+        print(sum_len)
+
+    def fetch_new_images(self):
+        pass
 
     def generate_batch(self):
         pass
