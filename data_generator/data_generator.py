@@ -84,6 +84,10 @@ class CocoDataGenerator(utils.Sequence):
                 continue
             image_downloaded = np.array(transform.resize(image_downloaded,
                                                          self.image_shape))
+
+            image_downloaded[:, :, 0] -= 103.939
+            image_downloaded[:, :, 1] -= 116.779
+            image_downloaded[:, :, 2] -= 123.68
             relevant_images[image_id] = image_downloaded
             relevant_annotation_ids.extend(self.image_mappings[image_id][1])
         self.relevant_images = relevant_images
