@@ -11,7 +11,7 @@ class CocoDataGenerator(utils.Sequence):
 
     def __init__(self, batch_size=16, images_in_memory=100,
                  batches_with_images=10, directory_path=None,
-                 dictionary_size=None, sequence_length=20,
+                 dictionary_size=2048, sequence_length=20,
                  image_shape=(128, 128)):
         self.batch_size = batch_size
         self.images_in_memory = images_in_memory
@@ -62,7 +62,10 @@ class CocoDataGenerator(utils.Sequence):
 
         self.caption_tokenizer.fit_on_texts(all_captions)
 
-        self.start_token_index = len(self.caption_tokenizer.word_index) + 1
+        if not self.dictionary_size:
+            self.start_token_index = len(self.caption_tokenizer.word_index) + 1
+        else:
+            self.start_token_index = self.dictionary_size + 1
         self.end_token_index = 0
 
         for key, caption in list(self.caption_mapping.items()):
@@ -76,7 +79,7 @@ class CocoDataGenerator(utils.Sequence):
             caption_output.append(self.end_token_index)
             caption_one_hot = []
             for word_token in caption_output:
-                num_tokens = len(self.caption_tokenizer.word_index) + 1
+                num_tokens = self.start_token_index
                 one_hot = [0 for i in range(num_tokens)]
                 one_hot[word_token] = 1
                 caption_one_hot.append(one_hot)
