@@ -152,3 +152,11 @@ class CocoDataGenerator(utils.Sequence):
         self.current_batch_counter = (self.current_batch_counter + 1) % self.batches_with_images
 
         return [np.array(batch_image), np.array(batch_caption)], np.array(batch_output)
+
+    def token_sequence_to_sentence(self, token_sequence):
+        words = []
+        for i in token_sequence:
+            if i == 0:
+                break
+            words.append(self.caption_tokenizer.word_index[i])
+        return words.join(' ')

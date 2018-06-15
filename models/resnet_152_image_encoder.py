@@ -205,4 +205,4 @@ def resnet152_model(img_input, weights_path=None):
 
     model_new = Model(img_input, x_newfc)
 
-    return model, (1024,)
+    return model_new, (1024,)

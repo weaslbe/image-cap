@@ -10,13 +10,19 @@ if __name__ == "__main__":
     data_gen.load_annotation_data()
     data_gen.prepare_captions_for_training()
 
-    model = ImageCaptioningModel(sequence_length=data_gen.sequence_length,
-                                 dictionary_length=data_gen.dictionary_size,
-                                 image_shape=data_gen.image_shape).build_model()
+    model_wrapper = ImageCaptioningModel(sequence_length=20,
+                                         dictionary_length=1024,
+                                         image_shape=(224, 224))
+
+    model = model_wrapper.build_model()
 
     model.compile('adam', loss='categorical_crossentropy',
                   sample_weight_mode='temporals')
 
     model.fit_generator(generator=data_gen, epochs=10,
                         use_multiprocessing=False,
-                        workers=8)
+                        workers=1)
+
+    token_sequence = model_wrapper.generate_caption('', model)
+    caption = data_gen.token_sequence_to_sentence(token_sequence)
+    print(caption)

@@ -2,6 +2,9 @@ from keras.layers import Conv2D, Input, Concatenate, Dense, Dropout, TimeDistrib
 from keras.models import Model
 from models.language_model import LanguageModel
 from models.resnet_152_image_encoder import resnet152_model
+from skimage import io, transform
+
+import numpy as np
 
 
 class ImageCaptioningModel:
@@ -36,3 +39,26 @@ class ImageCaptioningModel:
         model = Model(input=[coco_image, prev_words], output=out)
 
         return model
+
+    def generate_caption(self, image, model):
+        image_array = io.imread(image)
+        image_array[:, :, 0] -= 103.939
+        image_array[:, :, 1] -= 116.779
+        image_array[:, :, 2] -= 123.68
+        image_array = transform.resize(image_array,
+                                       self.image_shape)
+        seq_input = [self.dictionary_length + 1] + [0 for i in range(sequence_length - 1)]
+        output_sentence = []
+        for word_index in range(self.sequence_length):
+            output = model.predict([image_array, seq_input])
+            print(output)
+            output_token = np.argmax(output)
+            output_sentence.append(output_token)
+            if output_token == 0:
+                while len(output_sentence) < self.sequence_length:
+                    output_sentence.append(0)
+            if word_index < (self.sequence_length - 1):
+                seq_input[word_index + 1] = output_token
+        return output_sentence
+
+
