@@ -109,7 +109,7 @@ class CocoDataGenerator(utils.Sequence):
 
     def generate_batch(self):
         if self.current_batch_counter == 0:
-            self.fetch_new_images
+            self.fetch_new_images()
         captions_for_batch = np.random.choice(self.relevant_annotation_ids,
                                               size=self.batch_size)
         batch_image = []
