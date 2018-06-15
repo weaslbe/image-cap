@@ -20,7 +20,8 @@ class ImageCaptioningModel:
                                   self.image_shape[1],
                                   3))
 
-        img_emb, output_shape = self.build_image_model(coco_image)
+        img_emb, output_shape = self.build_image_model(coco_image,
+                                                       'resnet152_weights_tf.h5')
 
         img_emb = img_emb(coco_image)
 
