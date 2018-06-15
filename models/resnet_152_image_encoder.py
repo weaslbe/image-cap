@@ -4,7 +4,7 @@ from keras.layers import Dense, Conv2D, MaxPooling2D, AveragePooling2D, ZeroPadd
 from keras.layers.merge import add
 from keras.layers.normalization import BatchNormalization
 from keras.models import Model
-from keras.initializers import Zeros, Ones
+from keras import initializers
 from keras.engine import Layer, InputSpec
 from keras import backend as K
 
@@ -42,8 +42,8 @@ class Scale(Layer):
     def __init__(self, weights=None, axis=-1, momentum = 0.9, beta_init='zero', gamma_init='one', **kwargs):
         self.momentum = momentum
         self.axis = axis
-        self.beta_init = Zeros()
-        self.gamma_init = Ones()
+        self.beta_init = initializers.get(beta_init)
+        self.gamma_init = initializers.get(gamma_init)
         self.initial_weights = weights
         super(Scale, self).__init__(**kwargs)
 
@@ -51,8 +51,8 @@ class Scale(Layer):
         self.input_spec = [InputSpec(shape=input_shape)]
         shape = (int(input_shape[self.axis]),)
 
-        self.gamma = self.gamma_init(shape)
-        self.beta = self.beta_init(shape)
+        self.gamma = K.variable(self.gamma_init(shape), name='{}_gamma'.format(self.name))
+        self.beta = K.variable(self.beta_init(shape), name='{}_beta'.format(self.name))
         self.trainable_weights = [self.gamma, self.beta]
 
         if self.initial_weights is not None:
@@ -188,7 +188,6 @@ def resnet152_model(img_input, weights_path=None):
 
     x_fc = AveragePooling2D((7, 7), name='avg_pool')(x)
     x_fc = Flatten()(x_fc)
-    print(K.shape(x_fc))
     output = Dense(1000, activation='softmax', name='fc1000')(x_fc)
 
     model = Model(img_input, x_fc)
@@ -197,4 +196,4 @@ def resnet152_model(img_input, weights_path=None):
     if weights_path:
       model.load_weights(weights_path, by_name=True)
 
-    return model, K.shape(x_fc)
+    return model, (2048,)
