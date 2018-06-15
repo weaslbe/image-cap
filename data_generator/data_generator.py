@@ -30,7 +30,7 @@ class CocoDataGenerator(utils.Sequence):
     def __len__(self):
         return self.batches_per_epoch
 
-    def __get_item__(self):
+    def __getitem__(self):
         return self.generate_batch()
 
     def load_annotation_data(self):
