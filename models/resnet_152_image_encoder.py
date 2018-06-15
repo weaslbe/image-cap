@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
-from keras.layers import Dense, Convolution2D, MaxPooling2D, AveragePooling2D, ZeroPadding2D, Flatten, merge, Activation
+from keras.layers import Dense, Convolution2D, MaxPooling2D, AveragePooling2D, ZeroPadding2D, Flatten, Activation
+from keras.layers.merge import add
 from keras.layers.normalization import BatchNormalization
 from keras.models import Model
 from keras.initializers import Zeros, Ones
@@ -41,8 +42,8 @@ class Scale(Layer):
     def __init__(self, weights=None, axis=-1, momentum = 0.9, beta_init='zero', gamma_init='one', **kwargs):
         self.momentum = momentum
         self.axis = axis
-        self.beta_init = Zeros
-        self.gamma_init = Ones
+        self.beta_init = Zeros()
+        self.gamma_init = Ones()
         self.initial_weights = weights
         super(Scale, self).__init__(**kwargs)
 
@@ -50,8 +51,8 @@ class Scale(Layer):
         self.input_spec = [InputSpec(shape=input_shape)]
         shape = (int(input_shape[self.axis]),)
 
-        self.gamma = self.gamma_init(shape, name='{}_gamma'.format(self.name))
-        self.beta = self.beta_init(shape, name='{}_beta'.format(self.name))
+        self.gamma = self.gamma_init(shape)
+        self.beta = self.beta_init(shape)
         self.trainable_weights = [self.gamma, self.beta]
 
         if self.initial_weights is not None:
@@ -102,7 +103,7 @@ def identity_block(input_tensor, kernel_size, filters, stage, block):
     x = BatchNormalization(epsilon=eps, axis=bn_axis, name=bn_name_base + '2c')(x)
     x = Scale(axis=bn_axis, name=scale_name_base + '2c')(x)
 
-    x = merge([x, input_tensor], mode='sum', name='res' + str(stage) + block)
+    x = add([x, input_tensor], name='res' + str(stage) + block)
     x = Activation('relu', name='res' + str(stage) + block + '_relu')(x)
     return x
 
@@ -145,7 +146,7 @@ def conv_block(input_tensor, kernel_size, filters, stage, block, strides=(2, 2))
     shortcut = BatchNormalization(epsilon=eps, axis=bn_axis, name=bn_name_base + '1')(shortcut)
     shortcut = Scale(axis=bn_axis, name=scale_name_base + '1')(shortcut)
 
-    x = merge([x, shortcut], mode='sum', name='res' + str(stage) + block)
+    x = add([x, shortcut], name='res' + str(stage) + block)
     x = Activation('relu', name='res' + str(stage) + block + '_relu')(x)
     return x
 

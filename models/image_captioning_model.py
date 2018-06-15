@@ -12,9 +12,8 @@ class ImageCaptioningModel:
         self.dictionary_length = dictionary_length
         self.image_shape = image_shape
         self.language_model = LanguageModel(self.dictionary_length,
-                                            self.sequence_length,
-                                            ())
-        self.build_image_model = resnet_15
+                                            self.sequence_length)
+        self.build_image_model = resnet152_model
 
     def build_model(self):
         coco_image = Input(shape=(self.image_shape[0],
