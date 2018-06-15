@@ -63,8 +63,8 @@ def load_train_data():
 
 def main():
     data_gen = CocoDataGenerator()
-    gen.load_annotation_data()
-    gen.prepare_captions_for_training()
+    data_gen.load_annotation_data()
+    data_gen.prepare_captions_for_training()
 
     model = QuickImageCaptioningModel().build_model(2048)
 
