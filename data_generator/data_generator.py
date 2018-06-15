@@ -62,7 +62,7 @@ class CocoDataGenerator(utils.Sequence):
 
         self.caption_tokenizer.fit_on_texts(all_captions)
 
-        self.start_token_index = self.caption_tokenizer.num_tokens() + 1
+        self.start_token_index = len(self.caption_tokenizer._token2idx) + 1
         print(start_token_index)
         self.end_token_index = 0
 
@@ -77,7 +77,7 @@ class CocoDataGenerator(utils.Sequence):
             caption_output.append(self.end_token_index)
             caption_one_hot = []
             for word_token in caption_output:
-                num_tokens = self.caption_tokenizer.num_tokens() + 1
+                num_tokens = len(self.caption_tokenizer._token2idx) + 1
                 one_hot = [0 for i in range(num_tokens)]
                 one_hot[word_token] = 1
                 caption_one_hot.append(one_hot)
