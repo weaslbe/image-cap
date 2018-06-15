@@ -20,7 +20,9 @@ class ImageCaptioningModel:
                                   self.image_shape[1],
                                   3))
 
-        img_emb, output_shape = self.build_image_model(coco_image)(coco_image)
+        img_emb, output_shape = self.build_image_model(coco_image)
+
+        img_emb = img_emb(coco_image)
 
         prev_words = Input(shape=(self.sequence_length,),
                            name='prev_words')
