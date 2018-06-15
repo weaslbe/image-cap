@@ -79,7 +79,7 @@ class CocoDataGenerator(utils.Sequence):
         for image_id in images_to_load:
             image_filename = relevant_directory + self.image_mappings[image_id][0]
             image_downloaded = io.imread(image_filename)
-            if image_downloaded.shape[2] != 3:
+            if image_downloaded.ndim != 3:
                 continue
             image_downloaded = np.array(transform.resize(image_downloaded,
                                                          self.image_shape))
@@ -117,7 +117,7 @@ class CocoDataGenerator(utils.Sequence):
                 one_hot = [0 for i in range(num_tokens)]
                 one_hot[word_token] = 1
                 caption_one_hot.append(one_hot)
-            self.caption_mapping[key][0] = (np.array(caption_tokenized), np.array(caption_output))
+            self.caption_mapping[key][0] = (np.array(caption_tokenized), np.array(caption_one_hot))
 
     def generate_batch(self):
         if self.current_batch_counter == 0:

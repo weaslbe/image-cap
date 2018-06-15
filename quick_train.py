@@ -62,7 +62,9 @@ def load_train_data():
 
 
 def main():
-    data_gen = CocoDataGenerator(image_limit=1000)
+    data_gen = CocoDataGenerator(image_limit=20000, batches_per_epoch=50,
+                                 images_in_memory=1000,
+                                 batches_with_images=500)
     data_gen.load_annotation_data()
     data_gen.prepare_captions_for_training()
 
@@ -73,7 +75,7 @@ def main():
 
     model.fit_generator(generator=data_gen, epochs=10,
                         use_multiprocessing=False,
-                        workers=0)
+                        workers=8)
 
 
 if __name__ == "__main__":
