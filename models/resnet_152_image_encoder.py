@@ -1,14 +1,9 @@
 # -*- coding: utf-8 -*-
 
-import cv2
-import numpy as np
-import copy
-
-from keras.layers import Input, Dense, Convolution2D, MaxPooling2D, AveragePooling2D, ZeroPadding2D, Dropout, Flatten, merge, Reshape, Activation, Lambda, GlobalAveragePooling2D, Merge
-from keras.optimizers import SGD
+from keras.layers import Dense, Convolution2D, MaxPooling2D, AveragePooling2D, ZeroPadding2D, Flatten, merge, Activation
 from keras.layers.normalization import BatchNormalization
 from keras.models import Model
-from keras import initializations
+from keras.initializers import Zeros, Ones
 from keras.engine import Layer, InputSpec
 from keras import backend as K
 
@@ -46,8 +41,8 @@ class Scale(Layer):
     def __init__(self, weights=None, axis=-1, momentum = 0.9, beta_init='zero', gamma_init='one', **kwargs):
         self.momentum = momentum
         self.axis = axis
-        self.beta_init = initializations.get(beta_init)
-        self.gamma_init = initializations.get(gamma_init)
+        self.beta_init = Zeros
+        self.gamma_init = Ones
         self.initial_weights = weights
         super(Scale, self).__init__(**kwargs)
 
