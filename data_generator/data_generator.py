@@ -23,6 +23,7 @@ class CocoDataGenerator(utils.Sequence):
         self.batches_per_epoch = batches_per_epoch
         self.current_batch_counter = 0
         self.image_limit = image_limit
+        self.image_shape = image_shape
 
         if directory_path is None:
             self.directory_path = DEFAULT_DIR_PATH
@@ -67,8 +68,7 @@ class CocoDataGenerator(utils.Sequence):
 
     def fetch_new_images(self):
         relevant_directory = self.directory_path + 'train2014/'
-        avail_images = np.array(self.image_mappings.keys())
-        print(avail_images.shape)
+        avail_images = np.array(list(self.image_mappings.keys()))
         images_to_load = np.random.choice(avail_images,
                                           size=self.images_in_memory)
 

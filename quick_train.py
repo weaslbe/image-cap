@@ -72,7 +72,8 @@ def main():
                   sample_weight_mode='temporals')
 
     model.fit_generator(generator=data_gen, epochs=10,
-                        use_multiprocessing=False)
+                        use_multiprocessing=False,
+                        workers=0)
 
 
 if __name__ == "__main__":
