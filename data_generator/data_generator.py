@@ -1,4 +1,5 @@
 from keras import utils
+from keras.preprocessing.text import text_to_word_sequence, Tokenizer
 
 from skimage import io, transform
 
@@ -188,7 +189,7 @@ class CocoDataGenerator(utils.Sequence):
     def prepare_captions_for_training(self):
         self.caption_tokenizer = Tokenizer(num_words=self.dictionary_size)
 
-        all_captions = [caption[0] for key, caption in self.caption_mapping.items()]
+        all_captions = [' '.join(text_to_word_sequence(caption[0])) for key, caption in self.caption_mapping.items()]
 
         self.caption_tokenizer.fit_on_texts(all_captions)
 
@@ -261,4 +262,4 @@ class CocoDataGenerator(utils.Sequence):
             if i == 0:
                 break
             words.append(reverted_word_index[i])
-        return words.join(' ')
+        return ' '.join(words)

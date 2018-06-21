@@ -10,7 +10,9 @@ class LanguageModel:
                  sequence_length, lstm_cells,
                  predict_sequence, attention,
                  embedding_size, dense_size,
-                 dense_layers, dropout_rate):
+                 dense_layers, dropout_rate,
+                 pre_build_embedding=False,
+                 reverted_word_index=None):
         self.dictionary_length = dictionary_length
         self.sequence_length = sequence_length
         self.lstm_cells = lstm_cells
@@ -19,14 +21,22 @@ class LanguageModel:
         self.dense_size = dense_size
         self.dropout_rate = dropout_rate
         self.dense_layers = dense_layers
+        self.pre_build_embedding = pre_build_embedding
+        self.reverted_word_index = reverted_word_index
 
     def build_language_model(self, prev_words, encoder_output_shape):
         conv_feat = Input(shape=encoder_output_shape)
 
         conv_repeat = RepeatVector(self.sequence_length)(conv_feat)
 
-        emb = Embedding(self.dictionary_length,
-                        self.embedding_size)(prev_words)
+        if self.pre_build_embedding:
+            weights = self.load_embedding()
+            emb = Embedding(self.dictionary_length,
+                            self.embedding_size, weights=weights)
+        else:
+            emb = Embedding(self.dictionary_length, self.embedding_size)
+
+        emb = emb(prev_words)
 
         lstm_in = Concatenate()([conv_repeat, emb])
 
@@ -63,3 +73,11 @@ class LanguageModel:
                       output=predictions)
 
         return model
+
+    def load_embedding(self):
+        weights = np.zeros(self.dictionary_length + 1, self.embedding_size)
+        for word_index in range(self.dictionary_length):
+            word = self.reverted_word_index[word_index + 1]
+            emb = self.get_embedding(word)
+            weights[word_index + 1] = emb
+        return weights
