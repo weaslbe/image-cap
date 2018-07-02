@@ -79,8 +79,8 @@ class LanguageModel:
 
     def load_embedding(self):
         weights = np.zeros(self.dictionary_length + 1, self.embedding_size)
-        #for word_index in range(self.dictionary_length):
-        for word_index in range(self.dictionary_length[:10]):
+        for word_index in range(self.dictionary_length):
+        # for word_index in range(self.dictionary_length[:10]):
             word = self.reverted_word_index[word_index + 1]
             emb = self.get_embedding(word)
             weights[word_index + 1] = emb
