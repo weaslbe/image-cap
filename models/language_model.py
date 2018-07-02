@@ -1,3 +1,5 @@
+import io
+import numpy as np
 from keras.layers import Input, Concatenate, Dense
 from keras.layers import Dropout, TimeDistributed, RepeatVector
 from keras.layers import Embedding, LSTM, Multiply
@@ -23,6 +25,7 @@ class LanguageModel:
         self.dense_layers = dense_layers
         self.pre_build_embedding = pre_build_embedding
         self.reverted_word_index = reverted_word_index
+        self.pretrained_word_vectors = self.load_vectors()
 
     def build_language_model(self, prev_words, encoder_output_shape):
         conv_feat = Input(shape=encoder_output_shape)
@@ -76,8 +79,23 @@ class LanguageModel:
 
     def load_embedding(self):
         weights = np.zeros(self.dictionary_length + 1, self.embedding_size)
-        for word_index in range(self.dictionary_length):
+        #for word_index in range(self.dictionary_length):
+        for word_index in range(self.dictionary_length[:10]):
             word = self.reverted_word_index[word_index + 1]
             emb = self.get_embedding(word)
             weights[word_index + 1] = emb
         return weights
+
+    def load_vectors(self, fname="data/embeddings/wiki-news-300d-1M.vec"):
+        fin = io.open(fname, 'r', encoding='utf-8', newline='\n', errors='ignore')
+        n, d = map(int, fin.readline().split())
+        data = {}
+        for line in fin:
+            tokens = line.rstrip().split(' ')
+            data[tokens[0]] = map(float, tokens[1:])
+        return data
+
+    # input: a word
+    # output: fastText word-embedding
+    def get_embedding(self, word):
+        return self.pretrained_word_vectors[word]

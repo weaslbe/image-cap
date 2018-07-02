@@ -1,9 +1,8 @@
+import numpy as np
 from keras import utils
 from keras.preprocessing.text import text_to_word_sequence, Tokenizer
 
 from skimage import io, transform
-
-import numpy as np
 import json
 
 DEFAULT_DIR_PATH = '/data/dl_lecture_data/TrainVal/'

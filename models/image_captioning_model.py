@@ -15,7 +15,7 @@ class ImageCaptioningModel:
         self.dictionary_length = dictionary_length
         self.image_shape = image_shape
         self.language_model = LanguageModel(self.dictionary_length,
-                                            self.sequence_length)
+                                            self.sequence_length, pre_build_embedding=True)
         self.build_image_model = resnet152_model
 
     def build_model(self):
@@ -47,7 +47,7 @@ class ImageCaptioningModel:
         image_array[:, :, 2] -= 123.68
         image_array = transform.resize(image_array,
                                        self.image_shape)
-        seq_input = [self.dictionary_length + 1] + [0 for i in range(sequence_length - 1)]
+        seq_input = [self.dictionary_length + 1] + [0 for i in range(self.sequence_length - 1)]
         output_sentence = []
         for word_index in range(self.sequence_length):
             output = model.predict([image_array, seq_input])
