@@ -9,7 +9,7 @@ if __name__ == "__main__":
                                  images_in_memory=500,
                                  batches_with_images=500,
                                  image_shape=(224, 224),
-                                 dictionary_length=None
+                                 dictionary_size=None
                                  )
     data_gen.load_annotation_data()
     data_gen.prepare_captions_for_training()

@@ -10,10 +10,10 @@ from fastText import load_model
 class LanguageModel:
 
     def __init__(self, dictionary_length,
-                 sequence_length, lstm_cells,
-                 predict_sequence, attention,
-                 embedding_size, dense_size,
-                 dense_layers, dropout_rate,
+                 sequence_length, lstm_cells=1024,
+                 predict_sequence=True, attention=False,
+                 embedding_size=300, dense_size=0,
+                 dense_layers=0, dropout_rate=0.0,
                  pre_build_embedding=False,
                  reverted_word_index=None,
                  fast_text_model=None):
@@ -57,15 +57,15 @@ class LanguageModel:
 #        else:
 #            lstm = Concatenate()[conv_feat, lstm]
 
-        if self.attention:
-            attention_size = self.lstm_cells + encoder_output_shape[0]
-            if self.return_sequences:
-                attention = TimeDistributed(Dense(attention_size,
-                                            activation='softmax'))(lstm)
-            else:
-                attention = Dense(attention_size,
-                                  activation='softmax')(lstm)
-            lstm = Multiply([attention, lstm])
+#        if self.attention:
+#            attention_size = self.lstm_cells + encoder_output_shape[0]
+##            if self.return_sequences:
+#                attention = TimeDistributed(Dense(attention_size,
+#                                            activation='softmax'))(lstm)
+#            else:
+#                attention = Dense(attention_size,
+#                                  activation='softmax')(lstm)
+#            lstm = Multiply([attention, lstm])
 
         if self.predict_sequence:
             predictions = TimeDistributed(Dense(self.dictionary_length + 1,
