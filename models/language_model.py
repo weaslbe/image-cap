@@ -94,5 +94,5 @@ class LanguageModel:
         for word_index in range(self.dictionary_length - 1):
             word = self.reverted_word_index[word_index + 1]
             emb = f_model.get_word_vector(word)
-            weights[word_index + 1] = emb
+            weights[word_index] = emb
         return weights

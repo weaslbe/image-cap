@@ -9,8 +9,9 @@ if __name__ == "__main__":
     if LOCAL:
         pre_save_directory = "data/preprocessed/"
         directory_path = "data/"
+        local_image_limit = 10
 
-    data_gen = CocoDataGenerator(image_limit=200, batches_per_epoch=50,
+    data_gen = CocoDataGenerator(image_limit=local_image_limit if LOCAL else 2000, batches_per_epoch=50,
                                  images_in_memory=500,
                                  batches_with_images=500,
                                  image_shape=(224, 224),
@@ -21,7 +22,9 @@ if __name__ == "__main__":
     data_gen.load_annotation_data()
     data_gen.prepare_captions_for_training()
     data_gen.prebuild_training_files()
-    # if LOCAL && pretrained : comment line above and set data_gen.batch_counts = preprocessed_files count / 5
+    # if LOCAL && prebuild_training_files() done : comment line above and
+    # set data_gen.batch_counts = preprocessed_files count / 5
+
     rev_word_index = {}
     for key, value in data_gen.caption_tokenizer.word_index.items():
         rev_word_index[value] = key
@@ -33,7 +36,7 @@ if __name__ == "__main__":
 
     model = model_wrapper.build_model()
     if not LOCAL:
-        multi_gpu = multi_gpu_model(model)
+        multi_gpu = multi_gpu_model(model, gpus=2)
         model = multi_gpu
 
     checkpoint_callback = ModelCheckpoint('checkpoint_weights.{epoch:02d}.hdf5',
@@ -52,7 +55,7 @@ if __name__ == "__main__":
     model.fit_generator(generator=data_gen, epochs=10,
                             use_multiprocessing=True,
                             workers=20,
-                            callbacks=[tb_callback, checkpoint_callback])
+                            callbacks=[tb_callback, checkpoint_callback], verbose=2)
 
     model.save_weights('new_weights.hf5')
 
