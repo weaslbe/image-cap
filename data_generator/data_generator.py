@@ -1,6 +1,7 @@
 import numpy as np
 from keras import utils
 from keras.preprocessing.text import text_to_word_sequence, Tokenizer
+from tqdm import tqdm
 
 from skimage import io, transform
 import json
@@ -130,12 +131,19 @@ class CocoDataGenerator(utils.Sequence):
         image_downloaded[:, :, 2] -= 123.68
         return image_downloaded
 
+    def build_auxillary_loss(self, image_id):
+        auxillary_loss = np.zeros(self.start_token_index + 1)
+        for annotation in self.image_mappings[image_id][1]:
+            for word in self.caption_mapping[annotation][0][0]:
+                auxillary_loss[word] = 1
+        return auxillary_loss
+
     def prebuild_training_files(self):
         relevant_directory = self.directory_path + 'train2014/'
-        current_batch = [[], [], [], []]
+        current_batch = [[], [], [], [], []]
         batch_builder_counter = 0
         self.batch_counts = 0
-        for caption_id in list(self.caption_mapping):
+        for caption_id in tqdm(list(self.caption_mapping)):
             image_id = self.caption_mapping[caption_id][1]
             image_filename = relevant_directory + self.image_mappings[image_id][0]
             image = self.load_image(image_filename)
@@ -146,24 +154,26 @@ class CocoDataGenerator(utils.Sequence):
             current_batch[0].append(image)
             current_batch[1].append(self.caption_mapping[caption_id][0][0])
             current_batch[2].append(self.caption_mapping[caption_id][0][1])
-            current_batch[3].append(self.build_sample_weights(self.caption_mapping[0][0]))
+            current_batch[3].append(self.build_sample_weights(self.caption_mapping[caption_id][0][0]))
+            current_batch[4].append(self.build_auxillary_loss(image_id))
 
             batch_builder_counter += 1
 
-            if self.batch_builder_counter >= 16:
+            if batch_builder_counter >= 16:
                 self.save_batch_to_disk(self.batch_counts, current_batch)
                 batch_builder_counter = 0
-                current_batch = [[], [], [], []]
+                current_batch = [[], [], [], [], []]
 
     def save_batch_to_disk(self, batch_id, batch):
-        base_filename = self.pre_save_directory + batch_id
-        np.save(base_filename + "_img.npy", np.array(batch[0]))
+        base_filename = self.pre_save_directory + str(batch_id)
+        np.save(base_filename + "_img.npy", np.array(batch[0], dtype='f'))
         np.save(base_filename + "_sen.npy", np.array(batch[1]))
         np.save(base_filename + "_out.npy", np.array(batch[2]))
-        np.save(base_filename + "_weights.npy", np.array(batch[3]))
+        np.save(base_filename + "_weights.npy", np.array(batch[3], dtype='f'))
+        np.save(base_filename + "_aux_loss.npy", np.array(batch[4]))
 
     def load_batch_from_disk(self, batch_id):
-        base_filename = self.pre_save_directory + batch_id
+        base_filename = self.pre_save_directory + str(batch_id)
         img = np.load(base_filename + "_img.npy")
         sen = np.load(base_filename + "_sen.npy")
         out = np.load(base_filename + "_out.npy")
