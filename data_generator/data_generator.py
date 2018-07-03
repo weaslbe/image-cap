@@ -20,7 +20,7 @@ class CocoDataGenerator(utils.Sequence):
                  image_limit=None, lazy_build_output=True,
                  load_all=False, predict_series=True,
                  pre_build=True,
-                 pre_save_directory='/home/cps6/image-cap/data/'):
+                 pre_save_directory='/home/cps6/image-cap/data/', is_local=False):
         self.batch_size = batch_size
         self.images_in_memory = images_in_memory
         self.batches_with_images = batches_with_images
@@ -35,6 +35,7 @@ class CocoDataGenerator(utils.Sequence):
         self.predict_series = predict_series
         self.pre_build = pre_build
         self.pre_save_directory = pre_save_directory
+        self.is_local = is_local
 
         if directory_path is None:
             self.directory_path = DEFAULT_DIR_PATH

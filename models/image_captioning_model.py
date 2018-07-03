@@ -10,22 +10,26 @@ import numpy as np
 class ImageCaptioningModel:
 
     def __init__(self, sequence_length=20, dictionary_length=2048,
-                 image_shape=(224, 224), rev_word_index=None):
+                 image_shape=(224, 224), rev_word_index=None, is_local=False):
         self.sequence_length = sequence_length
         self.dictionary_length = dictionary_length
         self.image_shape = image_shape
         self.language_model = LanguageModel(self.dictionary_length,
                                             self.sequence_length, pre_build_embedding=True,
-                                            reverted_word_index=rev_word_index)
+                                            reverted_word_index=rev_word_index, is_local=is_local)
         self.build_image_model = resnet152_model
+        self.is_local = is_local
 
     def build_model(self):
         coco_image = Input(shape=(self.image_shape[0],
                                   self.image_shape[1],
                                   3))
+        resnet_weights_path = 'resnet152_weights_tf.h5'
+        if self.is_local:
+            resnet_weights_path = "data/" + resnet_weights_path
 
         img_emb, output_shape = self.build_image_model(coco_image,
-                                                       'resnet152_weights_tf.h5')
+                                                       resnet_weights_path)
 
 #        img_emb = img_emb(coco_image)
 

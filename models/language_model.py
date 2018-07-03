@@ -2,7 +2,7 @@ import io
 import numpy as np
 from keras.layers import Input, Concatenate, Dense
 from keras.layers import Dropout, TimeDistributed, RepeatVector
-from keras.layers import Embedding, CuDNNLSTM, Multiply
+from keras.layers import Embedding, CuDNNLSTM, Multiply, LSTM
 from keras.models import Model
 from fastText import load_model
 
@@ -16,7 +16,8 @@ class LanguageModel:
                  dense_layers=0, dropout_rate=0.0,
                  pre_build_embedding=False,
                  reverted_word_index=None,
-                 fast_text_model='embeddings/wiki.en.bin'):
+                 fast_text_model='embeddings/wiki.en.bin',
+                 is_local=False):
         self.dictionary_length = dictionary_length
         self.sequence_length = sequence_length
         self.lstm_cells = lstm_cells
@@ -28,6 +29,7 @@ class LanguageModel:
         self.pre_build_embedding = pre_build_embedding
         self.reverted_word_index = reverted_word_index
         self.fast_text_model = fast_text_model
+        self.is_local = is_local
 
     def build_language_model(self, prev_words, conv_feat,
                              encoder_output_shape, img_input):
@@ -45,9 +47,13 @@ class LanguageModel:
         emb = emb(prev_words)
 
 #        lstm_in = Concatenate()([conv_repeat, emb])
-
-        lstm = CuDNNLSTM(encoder_output_shape[0],
+        if self.is_local:
+            lstm = LSTM(encoder_output_shape[0],
+                        return_sequences=self.predict_sequence)
+        else:
+            lstm = CuDNNLSTM(encoder_output_shape[0],
                          return_sequences=self.predict_sequence)
+
 
         lstm = lstm(emb, initial_state=[conv_feat, conv_feat])
 

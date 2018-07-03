@@ -106,5 +106,8 @@ venv.bak/
 .idea/
 
 data/
+embeddings/
 
 .DS_Store
+
+
