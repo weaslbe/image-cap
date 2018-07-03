@@ -14,10 +14,14 @@ if __name__ == "__main__":
     data_gen.load_annotation_data()
     data_gen.prepare_captions_for_training()
     data_gen.prebuild_training_files()
+    rev_word_index = {}
+    for key, value in data_gen.tokenizer.word_index.items():
+        rev_word_index[value] = key
 
     model_wrapper = ImageCaptioningModel(sequence_length=20,
                                          dictionary_length=data_gen.start_token_index,
-                                         image_shape=(224, 224))
+                                         image_shape=(224, 224),
+                                         rev_word_index)
 
     model = model_wrapper.build_model()
 

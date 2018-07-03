@@ -10,12 +10,13 @@ import numpy as np
 class ImageCaptioningModel:
 
     def __init__(self, sequence_length=20, dictionary_length=2048,
-                 image_shape=(224, 224)):
+                 image_shape=(224, 224), rev_word_index=None):
         self.sequence_length = sequence_length
         self.dictionary_length = dictionary_length
         self.image_shape = image_shape
         self.language_model = LanguageModel(self.dictionary_length,
-                                            self.sequence_length, pre_build_embedding=True)
+                                            self.sequence_length, pre_build_embedding=True,
+                                            reverted_word_index=reverted_word_index)
         self.build_image_model = resnet152_model
 
     def build_model(self):
