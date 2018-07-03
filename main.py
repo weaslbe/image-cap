@@ -21,7 +21,7 @@ if __name__ == "__main__":
     data_gen.load_annotation_data()
     data_gen.prepare_captions_for_training()
     data_gen.prebuild_training_files()
-    # if LOCAL: zeile dadrüber auskommentieren und data_gen.batch_counts = alle files / 5
+    # if LOCAL && pretrained : comment line above and set data_gen.batch_counts = preprocessed_files count / 5
     rev_word_index = {}
     for key, value in data_gen.caption_tokenizer.word_index.items():
         rev_word_index[value] = key
