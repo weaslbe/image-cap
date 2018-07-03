@@ -158,6 +158,6 @@ def resnet152_model(img_input, weights_path=None):
     x_newfc = Dense(1024, activation='relu')(x_newfc)
     x_newfc = Dense(1024, activation='relu')(x_newfc)
 
-    model_new = Model(img_input, x_newfc)
+#    model_new = Model(img_input, x_newfc)
 
-    return model_new, (1024,)
+    return x_newfc, (1024,)

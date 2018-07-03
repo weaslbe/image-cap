@@ -1,6 +1,7 @@
 import numpy as np
 from keras import utils
 from keras.preprocessing.text import text_to_word_sequence, Tokenizer
+from tqdm import tqdm
 
 from skimage import io, transform
 import json
@@ -135,7 +136,7 @@ class CocoDataGenerator(utils.Sequence):
         current_batch = [[], [], [], []]
         batch_builder_counter = 0
         self.batch_counts = 0
-        for caption_id in list(self.caption_mapping):
+        for caption_id in tqdm(list(self.caption_mapping)):
             image_id = self.caption_mapping[caption_id][1]
             image_filename = relevant_directory + self.image_mappings[image_id][0]
             image = self.load_image(image_filename)
@@ -156,14 +157,14 @@ class CocoDataGenerator(utils.Sequence):
                 current_batch = [[], [], [], []]
 
     def save_batch_to_disk(self, batch_id, batch):
-        base_filename = self.pre_save_directory + batch_id
+        base_filename = self.pre_save_directory + str(batch_id)
         np.save(base_filename + "_img.npy", np.array(batch[0]))
         np.save(base_filename + "_sen.npy", np.array(batch[1]))
         np.save(base_filename + "_out.npy", np.array(batch[2]))
         np.save(base_filename + "_weights.npy", np.array(batch[3]))
 
     def load_batch_from_disk(self, batch_id):
-        base_filename = self.pre_save_directory + batch_id
+        base_filename = self.pre_save_directory + str(batch_id)
         img = np.load(base_filename + "_img.npy")
         sen = np.load(base_filename + "_sen.npy")
         out = np.load(base_filename + "_out.npy")
