@@ -83,7 +83,7 @@ class LanguageModel:
         return model
 
     def load_embedding(self):
-        weights = np.zeros(self.dictionary_length + 1, self.embedding_size)
+        weights = np.zeros((self.dictionary_length + 1, self.embedding_size))
         with load_model(self.fast_text_model) as f_model:
             for word_index in range(self.dictionary_length):
                 word = self.reverted_word_index[word_index + 1]

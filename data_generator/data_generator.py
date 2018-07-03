@@ -132,7 +132,7 @@ class CocoDataGenerator(utils.Sequence):
         return image_downloaded
 
     def build_auxillary_loss(self, image_id):
-        auxillary_loss = np.zeros(self.start_token_index)
+        auxillary_loss = np.zeros(self.start_token_index + 1)
         for annotation in self.image_mappings[image_id][1]:
             for word in self.caption_mapping[annotation][0][0]:
                 auxillary_loss[word] = 1
@@ -140,7 +140,7 @@ class CocoDataGenerator(utils.Sequence):
 
     def prebuild_training_files(self):
         relevant_directory = self.directory_path + 'train2014/'
-        current_batch = [[], [], [], []]
+        current_batch = [[], [], [], [], []]
         batch_builder_counter = 0
         self.batch_counts = 0
         for caption_id in tqdm(list(self.caption_mapping)):
@@ -162,7 +162,7 @@ class CocoDataGenerator(utils.Sequence):
             if batch_builder_counter >= 16:
                 self.save_batch_to_disk(self.batch_counts, current_batch)
                 batch_builder_counter = 0
-                current_batch = [[], [], [], []]
+                current_batch = [[], [], [], [], []]
 
     def save_batch_to_disk(self, batch_id, batch):
         base_filename = self.pre_save_directory + str(batch_id)
