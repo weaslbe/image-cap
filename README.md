@@ -9,7 +9,7 @@ get fastText repo and install locally with pip
 ```
 
 ## Local Folder Structure
-
+```
 ├── data
 │   ├── annotations                 <- annotations jsons
 │   └── preprocessed                <- results from data_gen.prebuild_training_files()
@@ -30,3 +30,4 @@ get fastText repo and install locally with pip
 │   ├── image_captioning_model.py             
 │   └── language_model.py
 │   └── resnet_152_image_encoder.py
+```
