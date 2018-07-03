@@ -131,6 +131,13 @@ class CocoDataGenerator(utils.Sequence):
         image_downloaded[:, :, 2] -= 123.68
         return image_downloaded
 
+    def build_auxillary_loss(self, image_id):
+        auxillary_loss = np.zeros(self.start_token_index)
+        for annotation in self.image_mappings[image_id][1]:
+            for word in self.caption_mapping[annotation][0][0]:
+                auxillary_loss[word] = 1
+        return auxillary_loss
+
     def prebuild_training_files(self):
         relevant_directory = self.directory_path + 'train2014/'
         current_batch = [[], [], [], []]
@@ -147,21 +154,23 @@ class CocoDataGenerator(utils.Sequence):
             current_batch[0].append(image)
             current_batch[1].append(self.caption_mapping[caption_id][0][0])
             current_batch[2].append(self.caption_mapping[caption_id][0][1])
-            current_batch[3].append(self.build_sample_weights(self.caption_mapping[0][0]))
+            current_batch[3].append(self.build_sample_weights(self.caption_mapping[caption_id][0][0]))
+            current_batch[4].append(self.build_auxillary_loss(image_id))
 
             batch_builder_counter += 1
 
-            if self.batch_builder_counter >= 16:
+            if batch_builder_counter >= 16:
                 self.save_batch_to_disk(self.batch_counts, current_batch)
                 batch_builder_counter = 0
                 current_batch = [[], [], [], []]
 
     def save_batch_to_disk(self, batch_id, batch):
         base_filename = self.pre_save_directory + str(batch_id)
-        np.save(base_filename + "_img.npy", np.array(batch[0]))
+        np.save(base_filename + "_img.npy", np.array(batch[0], dtype='f'))
         np.save(base_filename + "_sen.npy", np.array(batch[1]))
         np.save(base_filename + "_out.npy", np.array(batch[2]))
-        np.save(base_filename + "_weights.npy", np.array(batch[3]))
+        np.save(base_filename + "_weights.npy", np.array(batch[3], dtype='f'))
+        np.save(base_filename + "_aux_loss.npy", np.array(batch[4]))
 
     def load_batch_from_disk(self, batch_id):
         base_filename = self.pre_save_directory + str(batch_id)

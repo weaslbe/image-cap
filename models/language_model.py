@@ -27,7 +27,6 @@ class LanguageModel:
         self.dense_layers = dense_layers
         self.pre_build_embedding = pre_build_embedding
         self.reverted_word_index = reverted_word_index
-        self.pretrained_word_vectors = self.load_vectors()
         self.fast_text_model = fast_text_model
 
     def build_language_model(self, prev_words, conv_feat,
