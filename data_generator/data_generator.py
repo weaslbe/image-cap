@@ -161,6 +161,7 @@ class CocoDataGenerator(utils.Sequence):
 
             if batch_builder_counter >= 16:
                 self.save_batch_to_disk(self.batch_counts, current_batch)
+                self.batch_counts += 1
                 batch_builder_counter = 0
                 current_batch = [[], [], [], [], []]
 
@@ -210,7 +211,7 @@ class CocoDataGenerator(utils.Sequence):
 
         for key, caption in list(self.caption_mapping.items()):
             caption = caption[0]
-            caption_tokenized = self.caption_tokenizer.texts_to_sequences([caption])[0]
+            caption_tokenized = self.caption_tokenizevr.texts_to_sequences([caption])[0]
             if len(caption_tokenized) > self.sequence_length - 1:
                 caption_tokenized = caption_tokenized[:self.sequence_length - 1]
             caption_tokenized = [self.start_token_index] + caption_tokenized
@@ -260,7 +261,7 @@ class CocoDataGenerator(utils.Sequence):
             for sentence in batch[2]:
                 output.append(self.build_one_hot_output(sentence))
 
-        return [batch[0], batch[1]], [np.array(batch[2])], batch[3]
+        return [batch[0], batch[1]], [np.array(output)], batch[3]
 
     def token_sequence_to_sentence(self, token_sequence):
         reverted_word_index = {}

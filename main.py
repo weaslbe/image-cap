@@ -25,9 +25,9 @@ if __name__ == "__main__":
 
     model = model_wrapper.build_model()
 
-    multi_gpu = multi_gpu_model(model)
+    multi_gpu = multi_gpu_model(model, gpus=2)
 
-    checkpoint_callback = ModelCheckpoint('checkpoint_weights.{epoch:02d}-{val_loss:.2f}.hdf5',
+    checkpoint_callback = ModelCheckpoint('checkpoint_weights.{epoch:02d}.hdf5',
                                           monitor='loss', mode='min', period=1)
 
     tb_callback = TensorBoard(
