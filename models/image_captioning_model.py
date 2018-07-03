@@ -16,7 +16,7 @@ class ImageCaptioningModel:
         self.image_shape = image_shape
         self.language_model = LanguageModel(self.dictionary_length,
                                             self.sequence_length, pre_build_embedding=True,
-                                            reverted_word_index=reverted_word_index)
+                                            reverted_word_index=rev_word_index)
         self.build_image_model = resnet152_model
 
     def build_model(self):

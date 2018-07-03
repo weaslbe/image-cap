@@ -15,13 +15,13 @@ if __name__ == "__main__":
     data_gen.prepare_captions_for_training()
     data_gen.prebuild_training_files()
     rev_word_index = {}
-    for key, value in data_gen.tokenizer.word_index.items():
+    for key, value in data_gen.caption_tokenizer.word_index.items():
         rev_word_index[value] = key
 
     model_wrapper = ImageCaptioningModel(sequence_length=20,
                                          dictionary_length=data_gen.start_token_index,
                                          image_shape=(224, 224),
-                                         rev_word_index)
+                                         rev_word_index=rev_word_index)
 
     model = model_wrapper.build_model()
 
@@ -31,7 +31,8 @@ if __name__ == "__main__":
                                           monitor='loss', mode='min', period=1)
 
     tb_callback = TensorBoard(
-        log_dir='./logs', histogram_freq=0, batch_size=16, write_graph=True, write_grads=True,
+        log_dir='./logs', histogram_freq=1, batch_size=16,
+        write_graph=True, write_grads=True,
         write_images=False, embeddings_freq=0, embeddings_layer_names=None,
         embeddings_metadata=None, embeddings_data=None
     )

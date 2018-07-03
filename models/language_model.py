@@ -16,7 +16,7 @@ class LanguageModel:
                  dense_layers=0, dropout_rate=0.0,
                  pre_build_embedding=False,
                  reverted_word_index=None,
-                 fast_text_model=None):
+                 fast_text_model='embeddings/wiki.en.bin'):
         self.dictionary_length = dictionary_length
         self.sequence_length = sequence_length
         self.lstm_cells = lstm_cells
@@ -38,7 +38,7 @@ class LanguageModel:
         if self.pre_build_embedding:
             weights = self.load_embedding()
             emb = Embedding(self.dictionary_length,
-                            self.embedding_size, weights=weights)
+                            self.embedding_size, weights=[weights])
         else:
             emb = Embedding(self.dictionary_length, self.embedding_size)
 
@@ -83,9 +83,9 @@ class LanguageModel:
         return model
 
     def load_embedding(self):
-        weights = np.zeros((self.dictionary_length + 1, self.embedding_size))
+        weights = np.zeros((self.dictionary_length, self.embedding_size))
         f_model = load_model(self.fast_text_model)
-        for word_index in range(self.dictionary_length):
+        for word_index in range(self.dictionary_length - 1):
             word = self.reverted_word_index[word_index + 1]
             emb = f_model.get_word_vector(word)
             weights[word_index + 1] = emb
