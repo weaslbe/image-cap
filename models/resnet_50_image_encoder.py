@@ -7,7 +7,7 @@ def resnet50_model(img_input, weights=None):
                      input_tensor=img_input)
     x = model.output
     x = AveragePooling2D()(x)
-    x = Dense(1024)
+    x = Dense(1024)(x)
 
     for layer in model.layers:
         layer.trainable = False
