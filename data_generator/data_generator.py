@@ -211,7 +211,7 @@ class CocoDataGenerator(utils.Sequence):
 
         for key, caption in list(self.caption_mapping.items()):
             caption = caption[0]
-            caption_tokenized = self.caption_tokenizevr.texts_to_sequences([caption])[0]
+            caption_tokenized = self.caption_tokenizer.texts_to_sequences([caption])[0]
             if len(caption_tokenized) > self.sequence_length - 1:
                 caption_tokenized = caption_tokenized[:self.sequence_length - 1]
             caption_tokenized = [self.start_token_index] + caption_tokenized

@@ -5,7 +5,7 @@ from keras.callbacks import TensorBoard, ModelCheckpoint
 
 
 if __name__ == "__main__":
-    data_gen = CocoDataGenerator(image_limit=2000, batches_per_epoch=50,
+    data_gen = CocoDataGenerator(image_limit=120000, batches_per_epoch=50,
                                  images_in_memory=500,
                                  batches_with_images=500,
                                  image_shape=(224, 224),
@@ -13,7 +13,8 @@ if __name__ == "__main__":
                                  )
     data_gen.load_annotation_data()
     data_gen.prepare_captions_for_training()
-    data_gen.prebuild_training_files()
+#    data_gen.prebuild_training_files()
+    data_gen.batch_counts = 25827
     rev_word_index = {}
     for key, value in data_gen.caption_tokenizer.word_index.items():
         rev_word_index[value] = key
