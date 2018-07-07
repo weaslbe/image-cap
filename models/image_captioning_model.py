@@ -20,7 +20,9 @@ class ImageCaptioningModel:
                                             self.sequence_length, pre_build_embedding=True,
                                             reverted_word_index=rev_word_index, is_local=is_local)
         self.is_local = is_local
-        if res50:
+        self.res50 = res50
+
+        if self.res50:
             self.build_image_model = resnet50_model
         else:
             self.build_image_model = resnet152_model
@@ -29,7 +31,11 @@ class ImageCaptioningModel:
         coco_image = Input(shape=(self.image_shape[0],
                                   self.image_shape[1],
                                   3))
-        resnet_weights_path = 'resnet152_weights_tf.h5'
+        if self.res50:
+            resnet_weights_path = 'resnet50_weights_tf_dim_ordering_tf_kernels_notop.h5'
+        else:
+            resnet_weights_path = 'resnet152_weights_tf.h5'
+
         if self.is_local:
             resnet_weights_path = "data/" + resnet_weights_path
 

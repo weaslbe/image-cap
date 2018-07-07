@@ -24,7 +24,7 @@ if __name__ == "__main__":
     data_gen.prebuild_training_files()
     # if LOCAL && prebuild_training_files() done : comment line above and
     # set data_gen.batch_counts = preprocessed_files count / 5
-    #data_gen.batch_counts = 25827
+    # data_gen.batch_counts = 25827
     rev_word_index = {}
     for key, value in data_gen.caption_tokenizer.word_index.items():
         rev_word_index[value] = key
@@ -32,7 +32,7 @@ if __name__ == "__main__":
     model_wrapper = ImageCaptioningModel(sequence_length=20,
                                          dictionary_length=data_gen.start_token_index,
                                          image_shape=(224, 224),
-                                         rev_word_index=rev_word_index, is_local=LOCAL)
+                                         rev_word_index=rev_word_index, is_local=LOCAL, res50=False)
 
     model = model_wrapper.build_model()
     if not LOCAL:
@@ -50,12 +50,12 @@ if __name__ == "__main__":
     )
 
     model.compile('adam', loss='categorical_crossentropy',
-                      sample_weight_mode='temporals')
+                  sample_weight_mode='temporals')
 
     model.fit_generator(generator=data_gen, epochs=1 if LOCAL else 10,
-                            use_multiprocessing=True,
-                            workers=20,
-                            callbacks=[tb_callback, checkpoint_callback], verbose=2)
+                        use_multiprocessing=True,
+                        workers=20,
+                        callbacks=[tb_callback, checkpoint_callback], verbose=2)
 
     model.save_weights('new_weights.hf5')
 
