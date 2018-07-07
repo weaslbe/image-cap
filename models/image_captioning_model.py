@@ -51,16 +51,12 @@ class ImageCaptioningModel:
                                                               img_emb,
                                                               output_shape,
                                                               coco_image)
-        out = lang_model([img_emb, prev_words])
 
-        model = Model(input=[coco_image, prev_words], output=out)
-
-        return model
 #        out = lang_model([coco_image, prev_words])
 
 #        model = Model(input=[coco_image, prev_words], output=out)
 
-#       return lang_model
+        return lang_model
 
     def generate_caption(self, image, model):
         image_array = io.imread(image)
