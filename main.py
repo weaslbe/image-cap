@@ -32,30 +32,30 @@ if __name__ == "__main__":
     model_wrapper = ImageCaptioningModel(sequence_length=20,
                                          dictionary_length=data_gen.start_token_index,
                                          image_shape=(224, 224),
-                                         rev_word_index=rev_word_index, is_local=LOCAL, res50=False)
+                                         rev_word_index=rev_word_index, is_local=LOCAL,
+                                         res50=True)
 
     model = model_wrapper.build_model()
     if not LOCAL:
-        multi_gpu = multi_gpu_model(model, gpus=2)
-        model = multi_gpu
+        model = multi_gpu_model(model, gpus=2)
 
     checkpoint_callback = ModelCheckpoint('checkpoint_weights.{epoch:02d}.hdf5',
                                           monitor='loss', mode='min', period=1)
 
-    tb_callback = TensorBoard(
-        log_dir='./logs', histogram_freq=1, batch_size=16,
-        write_graph=True, write_grads=True,
-        write_images=False, embeddings_freq=0, embeddings_layer_names=None,
-        embeddings_metadata=None
-    )
+#    tb_callback = TensorBoard(
+#        log_dir='./logs', histogram_freq=1, batch_size=16,
+#        write_graph=True, write_grads=True,
+#        write_images=False, embeddings_freq=0, embeddings_layer_names=None,
+#        embeddings_metadata=None, embeddings_data=None
+#    )
 
-    model.compile('adam', loss='categorical_crossentropy',
-                  sample_weight_mode='temporals')
+    model.compile('adam', loss='categorical_crossentropy', sample_weight_mode='temporal')
 
-    model.fit_generator(generator=data_gen, epochs=1 if LOCAL else 10,
-                        use_multiprocessing=True,
-                        workers=20,
-                        callbacks=[tb_callback, checkpoint_callback], verbose=2)
+    model.fit_generator(generator=data_gen, epochs=10,
+                            use_multiprocessing=True,
+                            workers=20,
+                            #callbacks=[tb_callback, checkpoint_callback], verbose=2)
+                            callbacks=[checkpoint_callback], verbose=2)
 
     model.save_weights('new_weights.hf5')
 
