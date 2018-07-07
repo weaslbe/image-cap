@@ -2,6 +2,7 @@ from keras.layers import Conv2D, Input, Concatenate, Dense, Dropout, TimeDistrib
 from keras.models import Model
 from models.language_model import LanguageModel
 from models.resnet_152_image_encoder import resnet152_model
+from models.resnet_50_image_encoder import resnet50_model
 from skimage import io, transform
 
 import numpy as np
@@ -10,15 +11,19 @@ import numpy as np
 class ImageCaptioningModel:
 
     def __init__(self, sequence_length=20, dictionary_length=2048,
-                 image_shape=(224, 224), rev_word_index=None, is_local=False):
+                 image_shape=(224, 224), rev_word_index=None, is_local=False,
+                 res50=False):
         self.sequence_length = sequence_length
         self.dictionary_length = dictionary_length
         self.image_shape = image_shape
         self.language_model = LanguageModel(self.dictionary_length,
                                             self.sequence_length, pre_build_embedding=True,
                                             reverted_word_index=rev_word_index, is_local=is_local)
-        self.build_image_model = resnet152_model
         self.is_local = is_local
+        if res50:
+            self.build_image_model = resnet50_model
+        else:
+            self.build_image_model = resnet152_model
 
     def build_model(self):
         coco_image = Input(shape=(self.image_shape[0],
