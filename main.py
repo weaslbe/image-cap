@@ -22,7 +22,8 @@ if __name__ == "__main__":
     model_wrapper = ImageCaptioningModel(sequence_length=20,
                                          dictionary_length=data_gen.start_token_index,
                                          image_shape=(224, 224),
-                                         rev_word_index=rev_word_index)
+                                         rev_word_index=rev_word_index,
+                                         res50=True)
 
     model = model_wrapper.build_model()
 
@@ -31,20 +32,20 @@ if __name__ == "__main__":
     checkpoint_callback = ModelCheckpoint('checkpoint_weights.{epoch:02d}.hdf5',
                                           monitor='loss', mode='min', period=1)
 
-    tb_callback = TensorBoard(
-        log_dir='./logs', histogram_freq=1, batch_size=16,
-        write_graph=True, write_grads=True,
-        write_images=False, embeddings_freq=0, embeddings_layer_names=None,
-        embeddings_metadata=None, embeddings_data=None
-    )
+#    tb_callback = TensorBoard(
+#        log_dir='./logs', histogram_freq=1, batch_size=16,
+#        write_graph=True, write_grads=True,
+#        write_images=False, embeddings_freq=0, embeddings_layer_names=None,
+#        embeddings_metadata=None, embeddings_data=None
+#    )
 
     multi_gpu.compile('adam', loss='categorical_crossentropy',
-                      sample_weight_mode='temporals')
+                      sample_weight_mode='temporal')
 
     multi_gpu.fit_generator(generator=data_gen, epochs=10,
                             use_multiprocessing=True,
                             workers=20,
-                            callbacks=[tb_callback, checkpoint_callback])
+                            callbacks=[checkpoint_callback])
 
     model.save_weights('new_weights.hf5')
 
