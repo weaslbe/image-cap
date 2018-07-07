@@ -73,7 +73,7 @@ class LanguageModel:
 #            lstm = Multiply([attention, lstm])
 
         if self.predict_sequence:
-            predictions = TimeDistributed(Dense(self.dictionary_length + 1,
+            predictions = TimeDistributed(Dense(self.dictionary_length,
                                                 activation='softmax'),
                                           name='out')(lstm)
         else:
