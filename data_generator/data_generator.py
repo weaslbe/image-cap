@@ -8,6 +8,7 @@ import json
 
 DEFAULT_DIR_PATH = '/data/dl_lecture_data/TrainVal/'
 
+
 # TODO
 
 
@@ -20,7 +21,7 @@ class CocoDataGenerator(utils.Sequence):
                  image_limit=None, lazy_build_output=True,
                  load_all=False, predict_series=True,
                  pre_build=True,
-                 pre_save_directory='/home/cps6/image-cap/data/', is_local=False):
+                 pre_save_directory='/home/cps6/image-cap/data/', is_local=False, is_val=False):
         self.batch_size = batch_size
         self.images_in_memory = images_in_memory
         self.batches_with_images = batches_with_images
@@ -36,6 +37,7 @@ class CocoDataGenerator(utils.Sequence):
         self.pre_build = pre_build
         self.pre_save_directory = pre_save_directory
         self.is_local = is_local
+        self.is_val = is_val
 
         if directory_path is None:
             self.directory_path = DEFAULT_DIR_PATH
@@ -55,7 +57,10 @@ class CocoDataGenerator(utils.Sequence):
             return self.generate_prebuild_batch(idx)
 
     def load_annotation_data(self):
-        relevant_file = self.directory_path + 'annotations/captions_train2014.json'
+        if self.is_val:
+            relevant_file = self.directory_path + 'annotations/captions_val2014.json'
+        else:
+            relevant_file = self.directory_path + 'annotations/captions_train2014.json'
 
         json_annotations = {}
         with open(relevant_file, 'r') as f:
@@ -85,7 +90,10 @@ class CocoDataGenerator(utils.Sequence):
             self.caption_mapping[annotation_id] = [caption, image_id]
 
     def fetch_new_images(self):
-        relevant_directory = self.directory_path + 'train2014/'
+        if self.is_val:
+            relevant_directory = self.directory_path + 'val2014/'
+        else:
+            relevant_directory = self.directory_path + 'train2014/'
         avail_images = np.array(list(self.image_mappings.keys()))
         images_to_load = np.random.choice(avail_images,
                                           size=self.images_in_memory)
@@ -140,7 +148,10 @@ class CocoDataGenerator(utils.Sequence):
         return auxillary_loss
 
     def prebuild_training_files(self):
-        relevant_directory = self.directory_path + 'train2014/'
+        if self.is_val:
+            relevant_directory = self.directory_path + 'val2014/'
+        else:
+            relevant_directory = self.directory_path + 'train2014/'
         current_batch = [[], [], [], [], []]
         batch_builder_counter = 0
         self.batch_counts = 0
@@ -167,7 +178,10 @@ class CocoDataGenerator(utils.Sequence):
                 current_batch = [[], [], [], [], []]
 
     def save_batch_to_disk(self, batch_id, batch):
-        base_filename = self.pre_save_directory + str(batch_id)
+        if self.is_val:
+            base_filename = self.pre_save_directory + str(batch_id) + "_val"
+        else:
+            base_filename = self.pre_save_directory + str(batch_id)
         np.save(base_filename + "_img.npy", np.array(batch[0], dtype='f'))
         np.save(base_filename + "_sen.npy", np.array(batch[1]))
         np.save(base_filename + "_out.npy", np.array(batch[2]))
@@ -175,7 +189,10 @@ class CocoDataGenerator(utils.Sequence):
         np.save(base_filename + "_aux_loss.npy", np.array(batch[4]))
 
     def load_batch_from_disk(self, batch_id):
-        base_filename = self.pre_save_directory + str(batch_id)
+        if self.is_val:
+            base_filename = self.pre_save_directory + str(batch_id) + "_val"
+        else:
+            base_filename = self.pre_save_directory + str(batch_id)
         img = np.load(base_filename + "_img.npy")
         sen = np.load(base_filename + "_sen.npy")
         out = np.load(base_filename + "_out.npy")

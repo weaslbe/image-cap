@@ -25,6 +25,18 @@ if __name__ == "__main__":
     # if LOCAL && prebuild_training_files() done : comment line above and
     # set data_gen.batch_counts = preprocessed_files count / 5
     # data_gen.batch_counts = 25827
+
+    val_data_gen = CocoDataGenerator(image_limit=local_image_limit if LOCAL else 120000, batches_per_epoch=50,
+                                     images_in_memory=500,
+                                     batches_with_images=500,
+                                     image_shape=(224, 224),
+                                     dictionary_size=None, directory_path=directory_path,
+                                     pre_save_directory=pre_save_directory, is_local=LOCAL, is_val=True
+                                     )
+    val_data_gen.load_annotation_data()
+    val_data_gen.prepare_captions_for_training()
+    val_data_gen.prebuild_training_files()
+
     rev_word_index = {}
     for key, value in data_gen.caption_tokenizer.word_index.items():
         rev_word_index[value] = key
@@ -33,7 +45,7 @@ if __name__ == "__main__":
                                          dictionary_length=data_gen.start_token_index,
                                          image_shape=(224, 224),
                                          rev_word_index=rev_word_index, is_local=LOCAL,
-                                         res50=True)
+                                         res50=False)
 
     model = model_wrapper.build_model()
     if not LOCAL:
@@ -42,20 +54,22 @@ if __name__ == "__main__":
     checkpoint_callback = ModelCheckpoint('checkpoint_weights.{epoch:02d}.hdf5',
                                           monitor='loss', mode='min', period=1)
 
-#    tb_callback = TensorBoard(
-#        log_dir='./logs', histogram_freq=1, batch_size=16,
-#        write_graph=True, write_grads=True,
-#        write_images=False, embeddings_freq=0, embeddings_layer_names=None,
-#        embeddings_metadata=None, embeddings_data=None
-#    )
+    #    tb_callback = TensorBoard(
+    #        log_dir='./logs', histogram_freq=1, batch_size=16,
+    #        write_graph=True, write_grads=True,
+    #        write_images=False, embeddings_freq=0, embeddings_layer_names=None,
+    #        embeddings_metadata=None, embeddings_data=None
+    #    )
 
     model.compile('adam', loss='categorical_crossentropy', sample_weight_mode='temporal')
 
-    model.fit_generator(generator=data_gen, epochs=10,
-                            use_multiprocessing=True,
-                            workers=20,
-                            #callbacks=[tb_callback, checkpoint_callback], verbose=2)
-                            callbacks=[checkpoint_callback], verbose=2)
+    model.fit_generator(generator=data_gen, epochs=2 if LOCAL else 10,
+                        use_multiprocessing=True,
+                        workers=20,
+                        # callbacks=[tb_callback, checkpoint_callback], verbose=2)
+                        callbacks=[checkpoint_callback],
+                        verbose=2,
+                        validation_data=val_data_gen)
 
     model.save_weights('new_weights.hf5')
 
