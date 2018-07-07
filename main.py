@@ -52,7 +52,7 @@ if __name__ == "__main__":
     model.compile('adam', loss='categorical_crossentropy',
                       sample_weight_mode='temporals')
 
-    model.fit_generator(generator=data_gen, epochs=10,
+    model.fit_generator(generator=data_gen, epochs=1 if LOCAL else 10,
                             use_multiprocessing=True,
                             workers=20,
                             callbacks=[tb_callback, checkpoint_callback], verbose=2)

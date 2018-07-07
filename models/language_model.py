@@ -83,8 +83,8 @@ class LanguageModel:
             predictions = Dense(self.dictionary_length + 1,
                                 activation='softmax')(lstm)
 
-        model = Model(input=[img_input, prev_words],
-                      output=predictions)
+        model = Model(inputs=[img_input, prev_words],
+                      outputs=predictions)
 
         return model
 

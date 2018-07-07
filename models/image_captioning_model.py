@@ -43,7 +43,7 @@ class ImageCaptioningModel:
 
         out = lang_model([coco_image, prev_words])
 
-        model = Model(input=[coco_image, prev_words], output=out)
+        model = Model(inputs=[coco_image, prev_words], outputs=out)
 
         return model
 
