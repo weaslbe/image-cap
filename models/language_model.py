@@ -39,7 +39,7 @@ class LanguageModel:
 
         if self.pre_build_embedding:
             weights = self.load_embedding()
-            emb = Embedding(self.dictionary_length,
+            emb = Embedding(self.dictionary_length+1,
                             self.embedding_size, weights=[weights])
         else:
             emb = Embedding(self.dictionary_length, self.embedding_size)
