@@ -6,6 +6,7 @@ from models.resnet_50_image_encoder import resnet50_model
 from skimage import io, transform
 
 import numpy as np
+import random
 
 
 class ImageCaptioningModel:
@@ -17,7 +18,7 @@ class ImageCaptioningModel:
         self.dictionary_length = dictionary_length
         self.image_shape = image_shape
         self.language_model = LanguageModel(self.dictionary_length,
-                                            self.sequence_length, pre_build_embedding=False,
+                                            self.sequence_length, pre_build_embedding=Falsed,
                                             reverted_word_index=rev_word_index)
         if res50:
             self.build_image_model = resnet50_model
