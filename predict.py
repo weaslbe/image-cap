@@ -42,7 +42,7 @@ def token_sequence_to_caption(token_sequence, reverted_word_index):
     for i in token_sequence:
         if i == 0:
             break
-        words.append(reverted_word_index[i])
+        words.append(reverted_word_index[str(i)])
     return ' '.join(words)
 
 
