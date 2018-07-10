@@ -28,7 +28,7 @@ def generate_captions(model_wrapper, model,
     captions = []
     for image in image_json['images']:
         image_save = {}
-        t_sequence = model_wrapper.generate_captions(image['file_name'],
+        t_sequence = model_wrapper.generate_caption(image['file_name'],
                                                      model)
         caption = token_sequence_to_caption(t_sequence, reverted_word_index)
         image_save['image_id'] = image['id']
