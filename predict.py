@@ -33,6 +33,7 @@ def generate_captions(model_wrapper, model,
                                                         model)
         except:
             print(image['filename'])
+            t_sequence = [0 for i in range(20)]
         caption = token_sequence_to_caption(t_sequence, reverted_word_index)
         image_save['image_id'] = image['id']
         image_save['caption'] = caption
