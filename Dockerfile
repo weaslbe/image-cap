@@ -23,4 +23,14 @@ ENV LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$CUDA_ROOT/lib64
 
 ADD . /image-cap
 
+RUN cd image-cap
+
+RUN wget https://www.dropbox.com/s/pi0v32kzf5ogfm0/submission.hdf5?dl=0
+
+RUN wget https://www.dropbox.com/s/fbb96qcdpofae84/parameters.json?dl=0
+
+RUN wget https://www.dropbox.com/s/uc6pxmsaid1cgp9/rev_word_index.json?dl=0
+
+RUN cd ..
+
 WORKDIR /image-cap
