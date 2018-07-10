@@ -21,9 +21,11 @@ ENV CUDA_ROOT=$CUDA_HOME
 ENV PATH=$PATH:$CUDA_ROOT/bin:$HOME/bin
 ENV LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$CUDA_ROOT/lib64
 
-ADD . /image-cap
+RUN git clone git@github.com:weaslbe/image-cap.git
 
 RUN cd image-cap
+
+RUN git checkout pretrained_embeddings
 
 RUN wget https://www.dropbox.com/s/pi0v32kzf5ogfm0/submission.hdf5?dl=0
 
