@@ -179,7 +179,8 @@ class CocoDataGenerator(utils.Sequence):
         sen = np.load(base_filename + "_sen.npy")
         out = np.load(base_filename + "_out.npy")
         weights = np.load(base_filename + "_weights.npy")
-        return img, sen, out, weights
+        aux_loss = np.load(base_filename + "_aux_loss")
+        return img, sen, out, weights, aux_loss
 
     def build_sample_weights(self, sentence):
         sen_len = 0
@@ -261,7 +262,7 @@ class CocoDataGenerator(utils.Sequence):
             for sentence in batch[2]:
                 output.append(self.build_one_hot_output(sentence))
 
-        return [batch[0], batch[1]], [np.array(output)], batch[3]
+        return [batch[0], batch[1]], [np.array(output), batch[4]], batch[3]
 
     def token_sequence_to_sentence(self, token_sequence):
         reverted_word_index = {}

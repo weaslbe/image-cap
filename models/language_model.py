@@ -30,7 +30,8 @@ class LanguageModel:
         self.fast_text_model = fast_text_model
 
     def build_language_model(self, prev_words, conv_feat,
-                             encoder_output_shape, img_input):
+                             encoder_output_shape, img_input,
+                             second_output):
 #        conv_feat = Input(shape=encoder_output_shape)
 
 #        conv_repeat = RepeatVector(self.sequence_length)(conv_feat)
@@ -78,7 +79,7 @@ class LanguageModel:
                                 activation='softmax')(lstm)
 
         model = Model(input=[img_input, prev_words],
-                      output=predictions)
+                      output=[predictions, second_output])
 
         return model
 
