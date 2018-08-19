@@ -40,7 +40,7 @@ class ImageCaptioningModel:
         if self.is_local:
             resnet_weights_path = "data/" + resnet_weights_path
 
-        img_emb, output_shape = self.build_image_model(coco_image,
+        img_emb, output_shape, sec_output = self.build_image_model(coco_image,
                                                        resnet_weights_path)
 
 #        img_emb = img_emb(coco_image)
