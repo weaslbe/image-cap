@@ -17,7 +17,7 @@ class ImageCaptioningModel:
         self.dictionary_length = dictionary_length
         self.image_shape = image_shape
         self.language_model = LanguageModel(self.dictionary_length,
-                                            self.sequence_length, pre_build_embedding=False,
+                                            self.sequence_length, pre_build_embedding=True,
                                             reverted_word_index=rev_word_index, is_local=is_local)
         self.is_local = is_local
         self.res50 = res50
