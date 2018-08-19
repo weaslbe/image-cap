@@ -2,8 +2,9 @@ from keras.applications.resnet50 import ResNet50
 from keras.layers import AveragePooling2D, Dense, Flatten
 
 
-def resnet50_model(img_input, voc_size, weights='imagenet'):
-    model = ResNet50(include_top=False, weights=weights,
+def resnet50_model(img_input, voc_size, weights=None):
+    model = ResNet50(include_top=False,
+                     weights='imagenet' if weights is None else weights,
                      input_tensor=img_input)
     x = model.output
     x = AveragePooling2D()(x)

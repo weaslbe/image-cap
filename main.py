@@ -45,7 +45,7 @@ if __name__ == "__main__":
                                          dictionary_length=data_gen.start_token_index,
                                          image_shape=(224, 224),
                                          rev_word_index=rev_word_index, is_local=LOCAL,
-                                         res50=False)
+                                         res50=True)
 
     model = model_wrapper.build_model()
     if not LOCAL:
