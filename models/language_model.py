@@ -32,7 +32,8 @@ class LanguageModel:
         self.is_local = is_local
 
     def build_language_model(self, prev_words, conv_feat,
-                             encoder_output_shape, img_input):
+                             encoder_output_shape, img_input,
+                             second_output):
 #        conv_feat = Input(shape=encoder_output_shape)
 
 #        conv_repeat = RepeatVector(self.sequence_length)(conv_feat)
@@ -83,8 +84,8 @@ class LanguageModel:
             predictions = Dense(self.dictionary_length + 1,
                                 activation='softmax')(lstm)
 
-        model = Model(inputs=[img_input, prev_words],
-                      outputs=predictions)
+        model = Model(input=[img_input, prev_words],
+                      output=[predictions, second_output])
 
         return model
 
