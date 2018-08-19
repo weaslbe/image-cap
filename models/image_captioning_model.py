@@ -29,7 +29,7 @@ class ImageCaptioningModel:
         coco_image = Input(shape=(self.image_shape[0],
                                   self.image_shape[1],
                                   3))
-        img_emb, output_shape, sec_output = self.build_image_model(coco_image,
+        img_emb, output_shape, sec_output = self.build_image_model(coco_image, self.dictionary_length,
                                                        'resnet152_weights_tf.h5')
 
 #        img_emb = img_emb(coco_image)
