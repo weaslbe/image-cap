@@ -214,7 +214,7 @@ class CocoDataGenerator(utils.Sequence):
         sen = np.load(base_filename + "_sen.npy")
         out = np.load(base_filename + "_out.npy")
         weights = np.load(base_filename + "_weights.npy")
-        aux_loss = np.load(base_filename + "_aux_loss")
+        aux_loss = np.load(base_filename + "_aux_loss.npy")
         return img, sen, out, weights, aux_loss
 
     def build_sample_weights(self, sentence):

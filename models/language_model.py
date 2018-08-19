@@ -34,44 +34,41 @@ class LanguageModel:
     def build_language_model(self, prev_words, conv_feat,
                              encoder_output_shape, img_input,
                              second_output):
-#        conv_feat = Input(shape=encoder_output_shape)
+        #        conv_feat = Input(shape=encoder_output_shape)
 
-#        conv_repeat = RepeatVector(self.sequence_length)(conv_feat)
+        #        conv_repeat = RepeatVector(self.sequence_length)(conv_feat)
 
         if self.pre_build_embedding:
             weights = self.load_embedding()
-            emb = Embedding(self.dictionary_length+1,
+            emb = Embedding(self.dictionary_length,
                             self.embedding_size, weights=[weights])
         else:
             emb = Embedding(self.dictionary_length, self.embedding_size)
 
         emb = emb(prev_words)
 
-#        lstm_in = Concatenate()([conv_repeat, emb])
+        #        lstm_in = Concatenate()([conv_repeat, emb])
         if self.is_local:
-            lstm = LSTM(encoder_output_shape[0],
-                        return_sequences=self.predict_sequence)
+            lstm = LSTM(encoder_output_shape[0], return_sequences=self.predict_sequence)
         else:
-            lstm = CuDNNLSTM(encoder_output_shape[0],
-                         return_sequences=self.predict_sequence)
-
+            lstm = CuDNNLSTM(encoder_output_shape[0], return_sequences=self.predict_sequence)
 
         lstm = lstm(emb, initial_state=[conv_feat, conv_feat])
 
-#        if self.return_sequences:
-#            lstm = Concatenate()[conv_repeat, lstm]
-#        else:
-#            lstm = Concatenate()[conv_feat, lstm]
+        #        if self.return_sequences:
+        #            lstm = Concatenate()[conv_repeat, lstm]
+        #        else:
+        #            lstm = Concatenate()[conv_feat, lstm]
 
-#        if self.attention:
-#            attention_size = self.lstm_cells + encoder_output_shape[0]
-##            if self.return_sequences:
-#                attention = TimeDistributed(Dense(attention_size,
-#                                            activation='softmax'))(lstm)
-#            else:
-#                attention = Dense(attention_size,
-#                                  activation='softmax')(lstm)
-#            lstm = Multiply([attention, lstm])
+        #        if self.attention:
+        #            attention_size = self.lstm_cells + encoder_output_shape[0]
+        ##            if self.return_sequences:
+        #                attention = TimeDistributed(Dense(attention_size,
+        #                                            activation='softmax'))(lstm)
+        #            else:
+        #                attention = Dense(attention_size,
+        #                                  activation='softmax')(lstm)
+        #            lstm = Multiply([attention, lstm])
 
         if self.predict_sequence:
             predictions = TimeDistributed(Dense(self.dictionary_length,
@@ -84,8 +81,8 @@ class LanguageModel:
             predictions = Dense(self.dictionary_length + 1,
                                 activation='softmax')(lstm)
 
-        model = Model(input=[img_input, prev_words],
-                      output=[predictions, second_output])
+        model = Model(inputs=[img_input, prev_words],
+                      outputs=[predictions, second_output])
 
         return model
 
