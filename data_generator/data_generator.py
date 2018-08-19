@@ -57,13 +57,19 @@ class CocoDataGenerator(utils.Sequence):
             return self.generate_prebuild_batch(idx)
 
     def load_annotation_data(self):
-        if self.is_val:
-            relevant_file = self.directory_path + 'annotations/captions_val2014.json'
+        if self.is_local:
+            annotations_path = "annotations_test/"
         else:
-            relevant_file = self.directory_path + 'annotations/captions_train2014.json'
+            annotations_path = "annotations/"
+
+        if self.is_val:
+            relevant_file = self.directory_path + annotations_path + 'captions_val2014.json'
+        else:
+            relevant_file = self.directory_path + annotations_path + 'captions_train2014.json'
 
         json_annotations = {}
         with open(relevant_file, 'r') as f:
+            print(f"loading annotation file: {f}")
             json_annotations = json.load(f)
 
         self.image_mappings = {}
@@ -80,6 +86,7 @@ class CocoDataGenerator(utils.Sequence):
 
         self.caption_mapping = {}
 
+        #print(f"json annotations are: \n{json_annotations}")
         for annotation in json_annotations['annotations']:
             image_id = int(annotation['image_id'])
             annotation_id = int(annotation['id'])
@@ -90,10 +97,15 @@ class CocoDataGenerator(utils.Sequence):
             self.caption_mapping[annotation_id] = [caption, image_id]
 
     def fetch_new_images(self):
-        if self.is_val:
-            relevant_directory = self.directory_path + 'val2014/'
+        if self.is_local:
+            images_folder = "images_test/"
         else:
-            relevant_directory = self.directory_path + 'train2014/'
+            images_folder = ""
+
+        if self.is_val:
+            relevant_directory = self.directory_path + images_folder + 'val2014/'
+        else:
+            relevant_directory = self.directory_path + images_folder + 'train2014/'
         avail_images = np.array(list(self.image_mappings.keys()))
         images_to_load = np.random.choice(avail_images,
                                           size=self.images_in_memory)
@@ -148,10 +160,15 @@ class CocoDataGenerator(utils.Sequence):
         return auxillary_loss
 
     def prebuild_training_files(self):
-        if self.is_val:
-            relevant_directory = self.directory_path + 'val2014/'
+        if self.is_local:
+            images_folder = "images_test/"
         else:
-            relevant_directory = self.directory_path + 'train2014/'
+            images_folder = ""
+
+        if self.is_val:
+            relevant_directory = self.directory_path + images_folder + 'val2014/'
+        else:
+            relevant_directory = self.directory_path + images_folder + 'train2014/'
         current_batch = [[], [], [], [], []]
         batch_builder_counter = 0
         self.batch_counts = 0

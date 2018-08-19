@@ -1,0 +1,434 @@
+{
+  "info": {
+    "description": "COCO 2014 Dataset",
+    "url": "http://cocodataset.org",
+    "version": "1.0",
+    "year": 2014,
+    "contributor": "COCO Consortium",
+    "date_created": "2017/09/01"
+  },
+  "images": [
+    {
+      "license": 5,
+      "file_name": "COCO_train2014_000000057870.jpg",
+      "coco_url": "http://images.cocodataset.org/train2014/COCO_train2014_000000057870.jpg",
+      "height": 480,
+      "width": 640,
+      "date_captured": "2013-11-14 16:28:13",
+      "flickr_url": "http://farm4.staticflickr.com/3153/2970773875_164f0c0b83_z.jpg",
+      "id": 57870
+    },
+    {
+      "license": 5,
+      "file_name": "COCO_train2014_000000384029.jpg",
+      "coco_url": "http://images.cocodataset.org/train2014/COCO_train2014_000000384029.jpg",
+      "height": 429,
+      "width": 640,
+      "date_captured": "2013-11-14 16:29:45",
+      "flickr_url": "http://farm3.staticflickr.com/2422/3577229611_3a3235458a_z.jpg",
+      "id": 384029
+    },
+    {
+      "license": 1,
+      "file_name": "COCO_train2014_000000222016.jpg",
+      "coco_url": "http://images.cocodataset.org/train2014/COCO_train2014_000000222016.jpg",
+      "height": 640,
+      "width": 480,
+      "date_captured": "2013-11-14 16:37:59",
+      "flickr_url": "http://farm2.staticflickr.com/1431/1118526611_09172475e5_z.jpg",
+      "id": 222016
+    },
+    {
+      "license": 3,
+      "file_name": "COCO_train2014_000000520950.jpg",
+      "coco_url": "http://images.cocodataset.org/train2014/COCO_train2014_000000520950.jpg",
+      "height": 427,
+      "width": 640,
+      "date_captured": "2013-11-14 16:44:40",
+      "flickr_url": "http://farm8.staticflickr.com/7007/6413705793_1c391cd697_z.jpg",
+      "id": 520950
+    },
+    {
+      "license": 4,
+      "file_name": "COCO_train2014_000000069675.jpg",
+      "coco_url": "http://images.cocodataset.org/train2014/COCO_train2014_000000069675.jpg",
+      "height": 480,
+      "width": 640,
+      "date_captured": "2013-11-14 16:46:33",
+      "flickr_url": "http://farm8.staticflickr.com/7156/6415223357_5ef0955050_z.jpg",
+      "id": 69675
+    },
+    {
+      "license": 3,
+      "file_name": "COCO_train2014_000000547471.jpg",
+      "coco_url": "http://images.cocodataset.org/train2014/COCO_train2014_000000547471.jpg",
+      "height": 640,
+      "width": 383,
+      "date_captured": "2013-11-14 16:48:45",
+      "flickr_url": "http://farm7.staticflickr.com/6146/5976678628_8776fd68b0_z.jpg",
+      "id": 547471
+    },
+    {
+      "license": 5,
+      "file_name": "COCO_train2014_000000122688.jpg",
+      "coco_url": "http://images.cocodataset.org/train2014/COCO_train2014_000000122688.jpg",
+      "height": 640,
+      "width": 480,
+      "date_captured": "2013-11-14 16:52:26",
+      "flickr_url": "http://farm4.staticflickr.com/3249/2911640772_49daa557a0_z.jpg",
+      "id": 122688
+    },
+    {
+      "license": 1,
+      "file_name": "COCO_train2014_000000392136.jpg",
+      "coco_url": "http://images.cocodataset.org/train2014/COCO_train2014_000000392136.jpg",
+      "height": 347,
+      "width": 500,
+      "date_captured": "2013-11-14 16:54:17",
+      "flickr_url": "http://farm3.staticflickr.com/2231/2165411619_48f765e711_z.jpg",
+      "id": 392136
+    },
+    {
+      "license": 3,
+      "file_name": "COCO_train2014_000000398494.jpg",
+      "coco_url": "http://images.cocodataset.org/train2014/COCO_train2014_000000398494.jpg",
+      "height": 640,
+      "width": 427,
+      "date_captured": "2013-11-14 16:58:36",
+      "flickr_url": "http://farm4.staticflickr.com/3034/2702899336_e5957d911d_z.jpg",
+      "id": 398494
+    },
+    {
+      "license": 1,
+      "file_name": "COCO_train2014_000000090570.jpg",
+      "coco_url": "http://images.cocodataset.org/train2014/COCO_train2014_000000090570.jpg",
+      "height": 429,
+      "width": 640,
+      "date_captured": "2013-11-14 17:24:23",
+      "flickr_url": "http://farm9.staticflickr.com/8012/7478438612_33bb7f4d05_z.jpg",
+      "id": 90570
+    },
+    {
+      "license": 5,
+      "file_name": "COCO_train2014_000000504616.jpg",
+      "coco_url": "http://images.cocodataset.org/train2014/COCO_train2014_000000504616.jpg",
+      "height": 640,
+      "width": 480,
+      "date_captured": "2013-11-14 17:25:53",
+      "flickr_url": "http://farm4.staticflickr.com/3232/2865439282_b1bb926238_z.jpg",
+      "id": 504616
+    },
+    {
+      "license": 1,
+      "file_name": "COCO_train2014_000000161919.jpg",
+      "coco_url": "http://images.cocodataset.org/train2014/COCO_train2014_000000161919.jpg",
+      "height": 612,
+      "width": 612,
+      "date_captured": "2013-11-14 17:47:11",
+      "flickr_url": "http://farm8.staticflickr.com/7195/7112147055_26b8dcee9f_z.jpg",
+      "id": 161919
+    }
+  ],
+  "annotations": [
+    {
+      "image_id": 69675,
+      "id": 72465,
+      "caption": "A child and woman are cooking in the kitchen."
+    },
+    {
+      "image_id": 69675,
+      "id": 74946,
+      "caption": "A woman glances at a young girl's cooking on the stovetop"
+    },
+    {
+      "image_id": 69675,
+      "id": 76104,
+      "caption": "A young girl and a woman preparing food in a kitchen."
+    },
+    {
+      "image_id": 69675,
+      "id": 81696,
+      "caption": "a young person and an older person in a kitchen"
+    },
+    {
+      "image_id": 69675,
+      "id": 84192,
+      "caption": "Two women cooking on stove in a kitchen together."
+    },
+    {
+      "image_id": 384029,
+      "id": 118034,
+      "caption": "A man preparing desserts in a kitchen covered in frosting."
+    },
+    {
+      "image_id": 384029,
+      "id": 157682,
+      "caption": "A chef is preparing and decorating many small pastries."
+    },
+    {
+      "image_id": 384029,
+      "id": 159179,
+      "caption": "A baker prepares various types of baked goods."
+    },
+    {
+      "image_id": 384029,
+      "id": 175826,
+      "caption": "a close up of a person grabbing a pastry in a container"
+    },
+    {
+      "image_id": 384029,
+      "id": 185540,
+      "caption": "Close up of a hand touching various pastries."
+    },
+    {
+      "image_id": 547471,
+      "id": 256750,
+      "caption": "A black and white image of a man in a suit wearing glasses walking through a door."
+    },
+    {
+      "image_id": 547471,
+      "id": 260128,
+      "caption": "A nicely dressed man in a door way."
+    },
+    {
+      "image_id": 547471,
+      "id": 262429,
+      "caption": "A man in glasses walks through an open door. "
+    },
+    {
+      "image_id": 547471,
+      "id": 263365,
+      "caption": " A man smiling and walking through a doorway."
+    },
+    {
+      "image_id": 547471,
+      "id": 265939,
+      "caption": "A black and white photo of a man in suit and tie."
+    },
+    {
+      "image_id": 398494,
+      "id": 276123,
+      "caption": "A bicycle parked in a kitchen with a stove and cabinets."
+    },
+    {
+      "image_id": 398494,
+      "id": 278571,
+      "caption": "A black bicycle leaning against the kitchen cabinets."
+    },
+    {
+      "image_id": 398494,
+      "id": 279294,
+      "caption": "small white kitchen with a bike and backpack parked in it"
+    },
+    {
+      "image_id": 398494,
+      "id": 279687,
+      "caption": "A bicycle leaning on the stove and cabinets located inside the kitchen."
+    },
+    {
+      "image_id": 398494,
+      "id": 282204,
+      "caption": "A bicycle parked in a kitchen by the stove."
+    },
+    {
+      "image_id": 161919,
+      "id": 299640,
+      "caption": "A person is cutting a roast with a fork and knife."
+    },
+    {
+      "image_id": 161919,
+      "id": 301131,
+      "caption": "There is a man cutting meat on a cutting board"
+    },
+    {
+      "image_id": 161919,
+      "id": 301443,
+      "caption": "A man is slicing meat with a knife. "
+    },
+    {
+      "image_id": 161919,
+      "id": 303018,
+      "caption": "Man cutting a hot piece of meat on a cutting board. "
+    },
+    {
+      "image_id": 161919,
+      "id": 306285,
+      "caption": "A man cutting meat on a small cutting board."
+    },
+    {
+      "image_id": 90570,
+      "id": 329613,
+      "caption": "Two people in a food truck, one looking at an order."
+    },
+    {
+      "image_id": 90570,
+      "id": 331068,
+      "caption": "A man in a beanie and glasses leans over a counter."
+    },
+    {
+      "image_id": 90570,
+      "id": 334752,
+      "caption": "A man in a food cart looking down at a piece of paper."
+    },
+    {
+      "image_id": 90570,
+      "id": 337434,
+      "caption": "a man with a beard and a blue shirt is making some food"
+    },
+    {
+      "image_id": 90570,
+      "id": 340272,
+      "caption": "A person working behind the counter of a food truck."
+    },
+    {
+      "image_id": 122688,
+      "id": 390926,
+      "caption": "The huge clock on the wall is near a wooden table."
+    },
+    {
+      "image_id": 122688,
+      "id": 392777,
+      "caption": "The clock has a large face with numbers."
+    },
+    {
+      "image_id": 122688,
+      "id": 394802,
+      "caption": "a clock with big numbers at the end of a table"
+    },
+    {
+      "image_id": 122688,
+      "id": 397142,
+      "caption": "A table and chairs with a large clock on the wall."
+    },
+    {
+      "image_id": 122688,
+      "id": 398966,
+      "caption": "a large clock on the wall above a radiator "
+    },
+    {
+      "image_id": 392136,
+      "id": 562912,
+      "caption": "A large bus and some people on the street."
+    },
+    {
+      "image_id": 392136,
+      "id": 565456,
+      "caption": "Several people are standing on the sidewalk as a bus goes by."
+    },
+    {
+      "image_id": 392136,
+      "id": 566152,
+      "caption": "Bus rushing by a group of people walking in a city."
+    },
+    {
+      "image_id": 392136,
+      "id": 566413,
+      "caption": "A double-decker bus moving down the street as people stand waiting."
+    },
+    {
+      "image_id": 392136,
+      "id": 566641,
+      "caption": "A group of people standing next to a yellow and blue double decker bus."
+    },
+    {
+      "image_id": 520950,
+      "id": 636271,
+      "caption": "the kitchen is full of spices on the rack"
+    },
+    {
+      "image_id": 520950,
+      "id": 638152,
+      "caption": "A kitchen with counter, oven and other accessories."
+    },
+    {
+      "image_id": 520950,
+      "id": 638287,
+      "caption": "A small kitchen that utilizes all of its space. "
+    },
+    {
+      "image_id": 520950,
+      "id": 638446,
+      "caption": "This small kitchen has pots, pans and spices on display"
+    },
+    {
+      "image_id": 520950,
+      "id": 643555,
+      "caption": "A VERY SMALL KITCHEN WITH A STOVE AND A SHELF OF POTS "
+    },
+    {
+      "image_id": 504616,
+      "id": 669465,
+      "caption": "a person in white is standing in a kitchen"
+    },
+    {
+      "image_id": 504616,
+      "id": 670608,
+      "caption": "A chef slides a pizza into a brick oven."
+    },
+    {
+      "image_id": 504616,
+      "id": 673656,
+      "caption": "a man wearing an apron and standing next to an oven"
+    },
+    {
+      "image_id": 504616,
+      "id": 675480,
+      "caption": "A man with a ball cap and an apron using a brick oven. "
+    },
+    {
+      "image_id": 504616,
+      "id": 682557,
+      "caption": "The baker is getting ready for his bread to be ready."
+    },
+    {
+      "image_id": 57870,
+      "id": 787980,
+      "caption": "A restaurant has modern wooden tables and chairs."
+    },
+    {
+      "image_id": 57870,
+      "id": 789366,
+      "caption": "A long restaurant table with rattan rounded back chairs."
+    },
+    {
+      "image_id": 57870,
+      "id": 789888,
+      "caption": "a long table with a plant on top of it surrounded with wooden chairs "
+    },
+    {
+      "image_id": 57870,
+      "id": 791316,
+      "caption": "A long table with a flower arrangement in the middle for meetings"
+    },
+    {
+      "image_id": 57870,
+      "id": 794853,
+      "caption": "A table is adorned with wooden chairs with blue accents."
+    },
+    {
+      "image_id": 222016,
+      "id": 813979,
+      "caption": "a big red telephone booth that a man is standing in"
+    },
+    {
+      "image_id": 222016,
+      "id": 814735,
+      "caption": "a person standing inside of a phone booth "
+    },
+    {
+      "image_id": 222016,
+      "id": 816446,
+      "caption": "this is an image of a man in a phone booth."
+    },
+    {
+      "image_id": 222016,
+      "id": 816950,
+      "caption": "A man is standing in a red phone booth."
+    },
+    {
+      "image_id": 222016,
+      "id": 817379,
+      "caption": "A man using a phone in a phone booth."
+    }
+  ]
+}

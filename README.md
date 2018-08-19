@@ -6,6 +6,7 @@ Repository the team challenge of image captioning in the lecture Competitive Pro
 ```bash  
 pip install -r requirements.txt
 get fastText repo and install locally with pip
+(https://github.com/facebookresearch/fastText.git)
 ```
 
 ## Local Folder Structure

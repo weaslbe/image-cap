@@ -9,7 +9,7 @@ if __name__ == "__main__":
     if LOCAL:
         pre_save_directory = "data/preprocessed/"
         directory_path = "data/"
-        local_image_limit = 10
+        local_image_limit = 15
 
     data_gen = CocoDataGenerator(image_limit=local_image_limit if LOCAL else 120000, batches_per_epoch=50,
                                  images_in_memory=500,
@@ -26,7 +26,7 @@ if __name__ == "__main__":
     # set data_gen.batch_counts = preprocessed_files count / 5
     # data_gen.batch_counts = 25827
 
-    val_data_gen = CocoDataGenerator(image_limit=local_image_limit if LOCAL else 120000, batches_per_epoch=50,
+    '''val_data_gen = CocoDataGenerator(image_limit=local_image_limit if LOCAL else 120000, batches_per_epoch=50,
                                      images_in_memory=500,
                                      batches_with_images=500,
                                      image_shape=(224, 224),
@@ -35,7 +35,7 @@ if __name__ == "__main__":
                                      )
     val_data_gen.load_annotation_data()
     val_data_gen.prepare_captions_for_training()
-    val_data_gen.prebuild_training_files()
+    val_data_gen.prebuild_training_files()'''
 
     rev_word_index = {}
     for key, value in data_gen.caption_tokenizer.word_index.items():
@@ -68,8 +68,8 @@ if __name__ == "__main__":
                         workers=20,
                         # callbacks=[tb_callback, checkpoint_callback], verbose=2)
                         callbacks=[checkpoint_callback],
-                        verbose=2,
-                        validation_data=val_data_gen)
+                        #verbose=2, validation_data=val_data_gen)
+                        verbose=2)
 
     model.save_weights('new_weights.hf5')
 
