@@ -1,0 +1,43 @@
+{
+  "licenses": 5,
+  "info": {
+    "description": "This is stable 1.0 version of the 2014 MS COCO dataset.",
+    "url": "",
+    "version": "1.0",
+    "year": 2018,
+    "contributor": "HPI multimedia and deep learning group",
+    "date_created": "2018-07-04 13:02:39"
+  },
+  "images": [
+    {
+      "width": 0,
+      "date_captured": "",
+      "license": 5,
+      "flickr_url": "",
+      "file_name": "1000268201_693b08cb0e.jpg",
+      "id": 0,
+      "coco_url": "",
+      "height": 0
+    },
+    {
+      "width": 0,
+      "date_captured": "",
+      "license": 5,
+      "flickr_url": "",
+      "file_name": "1001773457_577c3a7d70.jpg",
+      "id": 1,
+      "coco_url": "",
+      "height": 0
+    },
+    {
+      "width": 0,
+      "date_captured": "",
+      "license": 5,
+      "flickr_url": "",
+      "file_name": "1002674143_1b742ab4b8.jpg",
+      "id": 2,
+      "coco_url": "",
+      "height": 0
+    }
+  ]
+}
