@@ -10,8 +10,8 @@ def resnet50_model(img_input, voc_size, weights=None):
     x = AveragePooling2D()(x)
     x = Flatten()(x)
     x = Dense(512, activation='relu')(x)
-    #xt = Dense(voc_size, activation='softmax')(x) # todo: fix
-    xt = Dense(194, activation='softmax')(x)
+    xt = Dense(voc_size+1, activation='softmax')(x) # todo: fix
+    # xt = Dense(194, activation='softmax')(x)
 
     for layer in model.layers:
         layer.trainable = False

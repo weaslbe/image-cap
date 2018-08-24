@@ -24,7 +24,7 @@ if __name__ == "__main__":
     data_gen.prebuild_training_files()
     # if LOCAL && prebuild_training_files() done : comment line above and
     # set data_gen.batch_counts = preprocessed_files count / 5
-    # data_gen.batch_counts = 25827
+    #data_gen.batch_counts = 3
 
     '''val_data_gen = CocoDataGenerator(image_limit=local_image_limit if LOCAL else 120000, batches_per_epoch=50,
                                      images_in_memory=500,

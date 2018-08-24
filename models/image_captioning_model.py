@@ -18,7 +18,7 @@ class ImageCaptioningModel:
         self.dictionary_length = dictionary_length
         self.image_shape = image_shape
         self.language_model = LanguageModel(self.dictionary_length,
-                                            self.sequence_length, pre_build_embedding=True,
+                                            self.sequence_length, pre_build_embedding=False,
                                             reverted_word_index=rev_word_index, is_local=is_local)
         self.is_local = is_local
         self.res50 = res50
@@ -40,18 +40,20 @@ class ImageCaptioningModel:
         if self.is_local:
             resnet_weights_path = "data/" + resnet_weights_path
 
-        img_emb, output_shape, sec_output = self.build_image_model(coco_image,
-                                                       resnet_weights_path)
-
-#        img_emb = img_emb(coco_image)
-
         prev_words = Input(shape=(self.sequence_length,),
                            name='prev_words')
 
-        lang_model = self.language_model.build_language_model(prev_words,
-                                                              img_emb,
-                                                              output_shape,
-                                                              coco_image, sec_output)
+        if self.res50:
+            img_emb, output_shape, sec_output = self.build_image_model(coco_image, self.dictionary_length, resnet_weights_path)
+            lang_model = self.language_model.build_language_model(prev_words, img_emb, output_shape, coco_image,
+                                                                  sec_output)
+        else:
+            img_emb, output_shape = self.build_image_model(coco_image, resnet_weights_path)
+            lang_model = self.language_model.build_language_model(prev_words, img_emb, output_shape, coco_image)
+
+#        img_emb = img_emb(coco_image)
+
+
 
 #        out = lang_model([coco_image, prev_words])
 
