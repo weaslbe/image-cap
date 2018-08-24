@@ -2,6 +2,7 @@ from data_generator.data_generator import CocoDataGenerator
 from models.image_captioning_model import ImageCaptioningModel
 from keras.utils import multi_gpu_model
 from keras.callbacks import TensorBoard, ModelCheckpoint
+import json
 
 LOCAL = True
 
@@ -15,7 +16,10 @@ if __name__ == "__main__":
                                  images_in_memory=500,
                                  batches_with_images=500,
                                  image_shape=(224, 224),
-                                 dictionary_size=None, directory_path=directory_path,
+                                 dictionary_size=10000,
+                                 batch_size=8,
+                                 sequence_length=12,
+                                 directory_path=directory_path,
                                  pre_save_directory=pre_save_directory, is_local=LOCAL
                                  )
 
@@ -41,7 +45,10 @@ if __name__ == "__main__":
     for key, value in data_gen.caption_tokenizer.word_index.items():
         rev_word_index[value] = key
 
-    model_wrapper = ImageCaptioningModel(sequence_length=20,
+    with open('data/images_test/rev_word_index.json', 'w+') as f:
+        json.dump(rev_word_index, f)
+
+    model_wrapper = ImageCaptioningModel(sequence_length=12,
                                          dictionary_length=data_gen.start_token_index,
                                          image_shape=(224, 224),
                                          rev_word_index=rev_word_index, is_local=LOCAL,
@@ -61,17 +68,18 @@ if __name__ == "__main__":
     #        embeddings_metadata=None, embeddings_data=None
     #    )
 
-    model.compile('adam', loss='categorical_crossentropy', sample_weight_mode='temporal')
+    # model.compile('adam', loss='categorical_crossentropy', sample_weight_mode='temporal')
+    model.compile('adam', loss='categorical_crossentropy')
 
     model.fit_generator(generator=data_gen, epochs=2 if LOCAL else 10,
                         use_multiprocessing=True,
                         workers=20,
-                        # callbacks=[tb_callback, checkpoint_callback], verbose=2)
                         callbacks=[checkpoint_callback],
-                        #verbose=2, validation_data=val_data_gen)
                         verbose=2)
 
-    model.save_weights('new_weights.hf5')
+    model.save_weights('new_weights.hdf5')
 
-    token_sequence = model_wrapper.generate_caption('', model)
+    '''token_sequence = model_wrapper.generate_caption('data/images_test/train2014/COCO_train2014_000000057870.jpg', model)
+    print(f"token sequence is: {token_sequence}")
     caption = data_gen.token_sequence_to_sentence(token_sequence)
+    print(f"caption is: {caption}")'''

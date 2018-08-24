@@ -169,7 +169,8 @@ class CocoDataGenerator(utils.Sequence):
             relevant_directory = self.directory_path + images_folder + 'val2014/'
         else:
             relevant_directory = self.directory_path + images_folder + 'train2014/'
-        current_batch = [[], [], [], [], []]
+        #current_batch = [[], [], [], [], []]
+        current_batch = [[], [], [], []]
         batch_builder_counter = 0
         self.batch_counts = 0
         for caption_id in tqdm(list(self.caption_mapping)):
@@ -183,8 +184,9 @@ class CocoDataGenerator(utils.Sequence):
             current_batch[0].append(image)
             current_batch[1].append(self.caption_mapping[caption_id][0][0])
             current_batch[2].append(self.caption_mapping[caption_id][0][1])
-            current_batch[3].append(self.build_sample_weights(self.caption_mapping[caption_id][0][0]))
-            current_batch[4].append(self.build_auxillary_loss(image_id))
+            #current_batch[3].append(self.build_sample_weights(self.caption_mapping[caption_id][0][0]))
+            #current_batch[4].append(self.build_auxillary_loss(image_id))
+            current_batch[3].append(self.build_auxillary_loss(image_id))
 
             batch_builder_counter += 1
 
@@ -202,8 +204,9 @@ class CocoDataGenerator(utils.Sequence):
         np.save(base_filename + "_img.npy", np.array(batch[0], dtype='f'))
         np.save(base_filename + "_sen.npy", np.array(batch[1]))
         np.save(base_filename + "_out.npy", np.array(batch[2]))
-        np.save(base_filename + "_weights.npy", np.array(batch[3], dtype='f'))
-        np.save(base_filename + "_aux_loss.npy", np.array(batch[4]))
+        #np.save(base_filename + "_weights.npy", np.array(batch[3], dtype='f'))
+        #np.save(base_filename + "_aux_loss.npy", np.array(batch[4]))
+        np.save(base_filename + "_aux_loss.npy", np.array(batch[3]))
 
     def load_batch_from_disk(self, batch_id):
         if self.is_val:
@@ -213,9 +216,10 @@ class CocoDataGenerator(utils.Sequence):
         img = np.load(base_filename + "_img.npy")
         sen = np.load(base_filename + "_sen.npy")
         out = np.load(base_filename + "_out.npy")
-        weights = np.load(base_filename + "_weights.npy")
+        #weights = np.load(base_filename + "_weights.npy")
         aux_loss = np.load(base_filename + "_aux_loss.npy")
-        return img, sen, out, weights, aux_loss
+        #return img, sen, out, weights, aux_loss
+        return img, sen, out, aux_loss
 
     def build_sample_weights(self, sentence):
         sen_len = 0
@@ -297,7 +301,8 @@ class CocoDataGenerator(utils.Sequence):
             for sentence in batch[2]:
                 output.append(self.build_one_hot_output(sentence))
 
-        return [batch[0], batch[1]], [np.array(output), batch[4]], batch[3]
+        #return [batch[0], batch[1]], [np.array(output), batch[4]], batch[3]
+        return [batch[0], batch[1]], [np.array(output), batch[3]]
 
     def token_sequence_to_sentence(self, token_sequence):
         reverted_word_index = {}
